@@ -1,5 +1,5 @@
 
-import * as React from "react"
+
 import { Button } from './ui/button';
 import { Checkbox } from "./ui/checkbox";
 import {
@@ -13,9 +13,21 @@ import {
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState,  } from "react";
+import { PlusCircle, Trash } from 'lucide-react';
 
+
+const billSchema = z.array(
+  z.object(
+    {
+      description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
+      amount: z.number().positive('Por favor, informe um valor válido'),
+      value: z.number().positive('Por favor, informe um valor válido')
+    }
+  )
+).min(1, 'Você deve incluir pelo menos um item.')
 
 
 
@@ -42,6 +54,7 @@ const createOSSchema = z.object({
     charger: z.string().nonempty("Campo obrigatório"),
     backup: z.string().nonempty("Campo obrigatório"),
   }),
+  logo: z.instanceof(FileList).transform(list => list.item(0)).optional(),
   date: z.string().min(1, "Data é obrigatório"),
   number: z.string().min(1, "Número é obrigatório"),
   clientName: z.string().min(1, "Nome do cliente é obrigatório"),
@@ -59,22 +72,85 @@ const createOSSchema = z.object({
   deviceIMEI: z.string().min(1, "IMEI do dispositivo é obrigatório"),
   deviceAccessories: z.string(),
   deviceAdditionalInfo: z.string(),
-  terms: z.string().min(1, "Termos são obrigatórios"),
-  termsTwo: z.string().min(1, "Termos são obrigatórios"),
-  termsThree: z.string().min(1, "Termos são obrigatórios"),
-  parts: z.number().min(0, "O valor deve ser maior ou igual a 0"),
-  total: z.number().min(0, "O total deve ser maior ou igual a 0"),
-});
+  terms: z.string().optional(),
+  termsTwo: z.string().optional(),
+  termsThree: z.string().optional(),
+  termsFour: z.string().optional(),
+  termsFive: z.string().optional(),
+  termsSix: z.string().optional(),
+  bills: billSchema,
+})
+
 
 export function CreateOSDialog() {
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, control, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
 
-  
-  function handleCreateOS(data) {
-    console.log('Dados enviados:', data);
-  }
+  const {fields, append, remove} = useFieldArray(
+    {
+      name: 'bills',
+      control,
+    }
+  )
+
+  const generateOrderNumber = () => {
+    return Math.floor(Math.random() * 1000000000); // Gera um número aleatório
+  };
+
+  const orderNumber = generateOrderNumber();
+
+
+  // Obtenha os valores do campo 'bills'
+  const bills = watch('bills') || []; // Garantir que seja um array
+
+  // Calcular o valor total
+  const totalValue = Array.isArray(bills)
+    ? bills.reduce((total, bill) => total + (bill.value || 0), 0)
+    : 0;
+
+  // Estado dos checkboxes
+  const [isCheckedTerms, setIsCheckedTerms] = useState(false);
+  const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(false);
+  const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(false);
+  const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(false);
+  const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
+  const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
+
+  // Funções para atualizar o estado dos checkboxes
+  const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
+  const handleCheckboxChangeTermsTwo = (e) => setIsCheckedTermsTwo(e);
+  const handleCheckboxChangeTermsThree = (e) => setIsCheckedTermsThree(e);
+  const handleCheckboxChangeTermsFour = (e) => setIsCheckedTermsFour(e);
+  const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
+  const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
+
+  const handleCreateOS = (data) => {
+    const filteredData = { ...data, totalValue };
+    // Remover os campos dos checkboxes não marcados
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
+    if (!isCheckedTermsThree) delete filteredData.termsThree;
+    if (!isCheckedTermsFour) delete filteredData.termsFour;
+    if (!isCheckedTermsFive) delete filteredData.termsFive;
+    if (!isCheckedTermsSix) delete filteredData.termsSix;
+
+    console.log('Dados enviados:', filteredData);
+  };
+
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
@@ -97,12 +173,45 @@ export function CreateOSDialog() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="number">Número de ordem</Label>
-                <Input id="number" {...register('number')} />
+                <Input id="number" {...register('number')} defaultValue={orderNumber} readOnly/>
                 {errors.number && <p className="text-red-500 text-xs">{errors.number.message}</p>}
               </div>
             </div>
+
+            <div className="space-y-2 ml-10">
+      <Label htmlFor="logo">Logotipo:</Label>
+      <div className="relative w-28 h-28 border border-gray-300 rounded overflow-hidden">
+        <Input
+          type="file"
+          id="logo"
+          accept="image/*"
+          {...register('logo')}
+          onChange={handleFileChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+        {logoPreview ? (
+          <img
+            src={logoPreview}
+            alt="Preview"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <span className="text-2xl">+</span>
+          </div>
+        )}
+      </div>
+      {errors.logo && (
+        <p className="text-red-500 text-xs">
+          {errors.logo.message}
+        </p>
+      )}
+    </div>
             
           </div>
+
+
+
         </div>
         
         {/* Seção: Dados do Cliente */}
@@ -199,23 +308,51 @@ export function CreateOSDialog() {
         <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
-      defaultChecked/>
-            <Input id="terms" {...register('terms')} />
+      onCheckedChange={handleCheckboxChangeTerms}
+      />
+            <Input id="terms" {...(isCheckedTerms ? {...register('terms')} : {})} defaultValue='A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.' />
             {errors.terms && <p className="text-red-500 text-xs">{errors.terms.message}</p>}
-          </div>
+        </div>
+
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
-      defaultChecked/>
-            <Input id="termsTwo" {...register('termsTwo')} />
+      onCheckedChange={handleCheckboxChangeTermsTwo}
+      />
+            <Input id="termsTwo" {...(isCheckedTermsTwo ? {...register('termsTwo')} : {})}defaultValue='Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.'/>
             {errors.termsTwo && <p className="text-red-500 text-xs">{errors.termsTwo.message}</p>}
           </div>
+
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
-      defaultChecked/>
-            <Input id="termsThree" {...register('termsThree')} />
+      onCheckedChange={handleCheckboxChangeTermsThree}/>
+            <Input id="termsThree" {...(isCheckedTermsThree ? {...register('termsThree')} : {})} defaultValue='Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.' />
             {errors.termsThree && <p className="text-red-500 text-xs">{errors.termsThree.message}</p>}
+          </div>
+
+          <div className="space-y-2 flex gap-2 items-center">
+            <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
+      style={{ "--primary":'#29aae1' }}
+      onCheckedChange={handleCheckboxChangeTermsFour}/>
+            <Input id="termsFour" {...(isCheckedTermsFour ? {...register('termsFour')} : {})} defaultValue='A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.'/>
+            {errors.termsFour && <p className="text-red-500 text-xs">{errors.termsFour.message}</p>}
+          </div>
+
+          <div className="space-y-2 flex gap-2 items-center">
+            <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
+      style={{ "--primary":'#29aae1' }}
+      onCheckedChange={handleCheckboxChangeTermsFive}/>
+            <Input id="termsFive" {...(isCheckedTermsFive ? {...register('termsFive')} : {})} defaultValue='Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.' />
+            {errors.termsFive && <p className="text-red-500 text-xs">{errors.termsFive.message}</p>}
+          </div>
+
+          <div className="space-y-2 flex gap-2 items-center">
+            <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
+      style={{ "--primary":'#29aae1' }}
+      onCheckedChange={handleCheckboxChangeTermsSix}/>
+            <Input id="termsSix" {...(isCheckedTermsSix ? {...register('termsSix')} : {})} defaultValue='A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.' />
+            {errors.termsSix && <p className="text-red-500 text-xs">{errors.termsSix.message}</p>}
           </div>
           
         </div>
@@ -235,7 +372,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.deviceTurnsOn')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.deviceTurnsOn')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.deviceTurnsOn')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -250,7 +387,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.buttons')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.buttons')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.buttons')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -267,7 +404,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.faultyScreen')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.faultyScreen')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.faultyScreen')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -282,7 +419,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.restarting')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.restarting')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.restarting')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -297,7 +434,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.locked')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.locked')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.locked')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -312,7 +449,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.network')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.network')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.network')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -329,7 +466,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.wifi')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.wifi')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.wifi')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -344,7 +481,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.headset')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.headset')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.headset')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -359,7 +496,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.microphone')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.microphone')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.microphone')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -374,7 +511,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.speaker')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.speaker')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.speaker')} className="mr-1" defaultChecked/> NT
         </label>
       </div>
     </div>
@@ -389,7 +526,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.frontalCamera')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.frontalCamera')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.frontalCamera')} className="mr-1" defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -404,7 +541,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.touch')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.touch')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.touch')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -419,7 +556,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.backCamera')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.backCamera')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.backCamera')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -434,7 +571,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.casing')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.casing')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.casing')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -449,7 +586,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.charger')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.charger')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.charger')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -464,7 +601,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.keyboard')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.keyboard')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.keyboard')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -479,7 +616,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.backup')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.backup')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.backup')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -494,7 +631,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.biometry')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.biometry')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.biometry')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
       
@@ -510,7 +647,7 @@ export function CreateOSDialog() {
           <input type="radio" value="NO" {...register('checklist.frontSensors')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.frontSensors')} className="mr-1" /> NT
+          <input type="radio" value="NT" {...register('checklist.frontSensors')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
 
@@ -522,39 +659,102 @@ export function CreateOSDialog() {
 </div>
 
 
-
+<div className="space-y-4 pl-2">
         {/* Seção: Valores */}
-        <div className="space-y-4 pl-2">
-        <h2 className="text-lg font-semibold bg-[#29aae1] text-white  pl-2 py-2">Orçamento</h2>
-          <div className="space-y-2">
-            <Label htmlFor="parts">Peças</Label>
-            <Input 
-              type="number" 
-              id="parts" 
-              {...register('parts', {
-                valueAsNumber: true // Adiciona a configuração para tratar o valor como número
-              })} 
-              />
-            {errors.parts && <p className="text-red-500 text-xs">{errors.parts.message}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="total">Valor Total</Label>
-            <Input 
-              type="number" 
-              id="total" 
-              {...register('total', {
-                valueAsNumber: true // Adiciona a configuração para tratar o valor como número
-              })} 
-              />
-            {errors.total && <p className="text-red-500 text-xs">{errors.total.message}</p>}
-          </div>
-        </div>
+        <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Orçamento</h2>
+
+        {fields.map((field, index) => (
+  <div key={field.id} className="border p-4 rounded-md shadow-sm mb-4">
+    
+    <div className="mb-4">
+      <Label htmlFor={`description-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+        Descrição
+      </Label>
+      <Input
+        id={`description-${index}`}
+        {...register(`bills.${index}.description`)}
+        type='text'
+        placeholder="Descrição"
+        className="border-gray-300 rounded-md shadow-sm"
+      />
+      {errors.bills?.[index]?.description && (
+        <p className="text-red-500 text-xs mt-1">
+          {errors.bills[index].description.message}
+        </p>
+      )}
+    </div>
+
+    <div className="mb-4">
+      <Label htmlFor={`amount-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+        Quantidade
+      </Label>
+      <Input
+        id={`amount-${index}`}
+        {...register(`bills.${index}.amount`, { valueAsNumber: true })}
+        type='number'
+        placeholder="Quantidade"
+        className="border-gray-300 rounded-md shadow-sm"
+      />
+      {errors.bills?.[index]?.amount && (
+        <p className="text-red-500 text-xs mt-1">
+          {errors.bills[index].amount.message}
+        </p>
+      )}
+    </div>
+
+    <div className="mb-4">
+      <Label htmlFor={`value-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+        Valor
+      </Label>
+      <Input
+        id={`value-${index}`}
+        {...register(`bills.${index}.value`, { valueAsNumber: true })}
+        type='number'
+        placeholder="Valor"
+        className="border-gray-300 rounded-md shadow-sm"
+      />
+      {errors.bills?.[index]?.value && (
+        <p className="text-red-500 text-xs mt-1">
+          {errors.bills[index].value.message}
+        </p>
+      )}
+    </div>
+  
+    <Button type='button' variant='outline' onClick={() => remove(index)} className="flex items-center text-black hover:text-red-500">
+      <Trash className="mr-2 w-4" />
+      Remover
+    </Button>
+  </div>
+))}
+
+<Button type='button' variant='outline' className='bg-[#29aae1] text-white hover:bg-cyan-500 hover:text-white' onClick={() => append({
+  description: '',
+  amount: 0,
+})}>
+  <PlusCircle />
+  <span className='ml-2 text-white'>Adicionar item</span>
+</Button>
+
+<div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+  <p className="text-xl font-bold text-gray-800">
+    Valor Total: <span className="text-green-600">R$ {totalValue.toFixed(2)}</span>
+  </p>
+</div>
+
+
+{errors?.bills && (
+        <p className="text-red-500 text-xs">
+          {errors.bills?.message}
+        </p>
+      )}
+      </div>
 
         <DialogFooter>
-          <Button type="submit">Salvar</Button>
-          <DialogClose className="ml-2">Cancelar</DialogClose>
+          <Button className="bg-[#29aae1] hover:bg-cyan-500" type="submit">Criar</Button>
+          <DialogClose className="ml-2"><Button variant='outline' >Cancelar</Button></DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>
   );
+
 }
