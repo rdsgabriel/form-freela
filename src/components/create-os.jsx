@@ -753,7 +753,7 @@ export function CreateOSDialog() {
 
         <DialogFooter>
           <Button className="bg-[#29aae1] hover:bg-cyan-500" type="submit">Criar</Button>
-          <DialogClose className="ml-2"><Button variant='outline' >Cancelar</Button></DialogClose>
+          <DialogClose asChild className="ml-2"><Button variant='outline' >Cancelar</Button></DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>

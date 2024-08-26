@@ -71,10 +71,12 @@ export default function Home() {
         <div className="border rounded-lg p-2">
           <Table>
             <TableHeader className='bg-[#29aae1]'>
+              <TableRow className='hover:bg-[#29aae1]'>
               <TableHead className='text-white rounded-tl-lg'>ID da OS</TableHead>
               <TableHead className='text-white'>Cliente</TableHead>
               <TableHead className='text-white'>Status</TableHead>
               <TableHead className='text-white rounded-tr-lg'>PDF</TableHead>
+              </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOrders.map((order, i) => (
