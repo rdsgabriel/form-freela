@@ -51,7 +51,7 @@ export default function Home() {
 
   const handleStatusChange = useCallback(async (id, newStatus) => {
     try {
-      const response = await fetch(`https://service-order-php.vercel.app/order-services/update/${id}`, {
+      const response = await fetch(`https://service-order-php.vercel.app/api/order-services/update/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
