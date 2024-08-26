@@ -30,7 +30,7 @@ const billSchema = z.array(
 ).min(1, 'Você deve incluir pelo menos um item.')
 
 
-
+const isClient = typeof window !== 'undefined' && typeof FileList !== 'undefined';
 // Schema de validação usando Zod
 const createOSSchema = z.object({
   checklist: z.object({
@@ -54,7 +54,9 @@ const createOSSchema = z.object({
     charger: z.string().nonempty("Campo obrigatório"),
     backup: z.string().nonempty("Campo obrigatório"),
   }),
-  logo: z.instanceof(FileList).transform(list => list.item(0)).optional(),
+  logo: isClient
+    ? z.instanceof(FileList).transform(list => list.item(0)).optional()
+    : z.any().optional(),
   date: z.string().min(1, "Data é obrigatório"),
   number: z.string().min(1, "Número é obrigatório"),
   clientName: z.string().min(1, "Nome do cliente é obrigatório"),
