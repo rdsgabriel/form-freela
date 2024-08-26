@@ -127,18 +127,40 @@ export function CreateOSDialog() {
   const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
   const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
 
-  const handleCreateOS = (data) => {
-    const filteredData = { ...data, totalValue };
-    // Remover os campos dos checkboxes não marcados
-    if (!isCheckedTerms) delete filteredData.terms;
-    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
-    if (!isCheckedTermsThree) delete filteredData.termsThree;
-    if (!isCheckedTermsFour) delete filteredData.termsFour;
-    if (!isCheckedTermsFive) delete filteredData.termsFive;
-    if (!isCheckedTermsSix) delete filteredData.termsSix;
 
-    console.log('Dados enviados:', filteredData);
-  };
+const handleCreateOS = async (data) => {
+  const filteredData = { ...data, totalValue };
+  
+  // Remover os campos dos checkboxes não marcados
+  if (!isCheckedTerms) delete filteredData.terms;
+  if (!isCheckedTermsTwo) delete filteredData.termsTwo;
+  if (!isCheckedTermsThree) delete filteredData.termsThree;
+  if (!isCheckedTermsFour) delete filteredData.termsFour;
+  if (!isCheckedTermsFive) delete filteredData.termsFive;
+  if (!isCheckedTermsSix) delete filteredData.termsSix;
+
+  try {
+    const response = await fetch('https://service-order-php.vercel.app/order-services/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(filteredData),
+    });
+
+    if (!response.ok) {
+      console.log(filteredData)
+      const errorText = await response.text();
+      console.error('Erro na resposta da rede:', response.status, response.statusText, errorText);
+      throw new Error(`Erro na resposta da rede: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('Dados enviados com sucesso:', result);
+  } catch (error) {
+    console.error('Erro ao enviar dados:', error);
+  }
+};
 
 
   const [logoPreview, setLogoPreview] = useState(null);
@@ -753,7 +775,8 @@ export function CreateOSDialog() {
 
         <DialogFooter>
           <Button className="bg-[#29aae1] hover:bg-cyan-500" type="submit">Criar</Button>
-          <DialogClose asChild className="ml-2"><Button variant='outline' >Cancelar</Button></DialogClose>
+          <DialogClose asChild className="ml-2">
+            <Button variant='outline' >Cancelar</Button></DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>
