@@ -155,7 +155,7 @@ const handleCreateOS = async (data) => {
   if (!isCheckedTermsSix) delete filteredData.termsSix;
   console.log('console logzao pra debug:',filteredData)
   try {
-    const response = await fetch('https://service-order-php.vercel.app/order-services/create', {
+    const response = await fetch('https://service-order-php.vercel.app/api/order-services/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

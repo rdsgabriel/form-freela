@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://service-order-php.vercel.app/order-services');
+        const response = await fetch('https://service-order-php.vercel.app/api/order-services');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
