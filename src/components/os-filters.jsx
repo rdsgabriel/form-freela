@@ -5,15 +5,16 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
 
+// Ajuste o esquema de validação para usar 'number' e 'client_name'
 const OSFiltersSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().optional()
+  number: z.string().optional(),
+  client_name: z.string().optional()
 });
 
 export function OSFilters({ onFilter }) {
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(OSFiltersSchema),
-    defaultValues: { id: "", name: "" }
+    defaultValues: { number: "", client_name: "" }
   });
 
   function handleFilterOS(data) {
@@ -23,8 +24,8 @@ export function OSFilters({ onFilter }) {
 
   return (
     <form onSubmit={handleSubmit(handleFilterOS)} className="flex items-center gap-2">
-      <Input placeholder="Busque por ID" {...register('id')} />
-      <Input placeholder="Busque por cliente" {...register('name')} />
+      <Input placeholder="Busque por ID" {...register('number')} />
+      <Input placeholder="Busque por cliente" {...register('client_name')} />
       <Button type="submit" variant="link">
         <Search className="w-4 h-4 mr-2 text-[#29aae1]" />
         Filtrar resultados

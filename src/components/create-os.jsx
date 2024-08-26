@@ -15,7 +15,7 @@ import { Label } from './ui/label';
 import { z } from 'zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState,  } from "react";
+import { useState, useEffect  } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
 
 
@@ -34,8 +34,8 @@ const isClient = typeof window !== 'undefined' && typeof FileList !== 'undefined
 // Schema de validação usando Zod
 const createOSSchema = z.object({
   checklist: z.object({
-    deviceTurnsOn: z.string().nonempty("Campo obrigatório"),
-    faultyScreen: z.string().nonempty("Campo obrigatório"),
+    device_turns_on: z.string().nonempty("Campo obrigatório"),
+    faulty_screen: z.string().nonempty("Campo obrigatório"),
     restarting: z.string().nonempty("Campo obrigatório"),
     locked: z.string().nonempty("Campo obrigatório"),
     network: z.string().nonempty("Campo obrigatório"),
@@ -43,10 +43,10 @@ const createOSSchema = z.object({
     headset: z.string().nonempty("Campo obrigatório"),
     microphone: z.string().nonempty("Campo obrigatório"),
     speaker: z.string().nonempty("Campo obrigatório"),
-    frontalCamera: z.string().nonempty("Campo obrigatório"),
-    backCamera: z.string().nonempty("Campo obrigatório"),
+    frontal_camera: z.string().nonempty("Campo obrigatório"),
+    back_camera: z.string().nonempty("Campo obrigatório"),
     biometry: z.string().nonempty("Campo obrigatório"),
-    frontSensors: z.string().nonempty("Campo obrigatório"),
+    front_sensors: z.string().nonempty("Campo obrigatório"),
     touch: z.string().nonempty("Campo obrigatório"),
     buttons: z.string().nonempty("Campo obrigatório"),
     keyboard: z.string().nonempty("Campo obrigatório"),
@@ -59,35 +59,50 @@ const createOSSchema = z.object({
     : z.any().optional(),
   date: z.string().min(1, "Data é obrigatório"),
   number: z.string().min(1, "Número é obrigatório"),
-  clientName: z.string().min(1, "Nome do cliente é obrigatório"),
-  clientPhone: z.string().min(1, "Telefone do cliente é obrigatório"),
-  clientDocument: z.string().min(1, "Documento do cliente é obrigatório"),
-  clientZipCode: z.string().min(1, "CEP do cliente é obrigatório"),
-  clientAddress: z.string().min(1, "Endereço do cliente é obrigatório"),
-  clientNumber: z.string().min(1, "Número do cliente é obrigatório"),
-  clientState: z.string().min(1, "Estado do cliente é obrigatório"),
-  clientCity: z.string().min(1, "Cidade do cliente é obrigatória"),
-  deviceBrand: z.string().min(1, "Marca do dispositivo é obrigatória"),
-  deviceModel: z.string().min(1, "Modelo do dispositivo é obrigatório"),
-  devicePassword: z.string().min(1, "Senha do dispositivo é obrigatória"),
-  deviceSerial: z.string().min(1, "Número de série do dispositivo é obrigatório"),
-  deviceIMEI: z.string().min(1, "IMEI do dispositivo é obrigatório"),
-  deviceAccessories: z.string(),
-  deviceAdditionalInfo: z.string(),
+  client_name: z.string().min(1, "Nome do cliente é obrigatório"),
+  client_phone: z.string().min(1, "Telefone do cliente é obrigatório"),
+  client_document: z.string().min(1, "Documento do cliente é obrigatório"),
+  client_zipcode: z.string().min(1, "CEP do cliente é obrigatório"),
+  client_address: z.string().min(1, "Endereço do cliente é obrigatório"),
+  client_number: z.string().min(1, "Número do cliente é obrigatório"),
+  client_state: z.string().min(1, "Estado do cliente é obrigatório"),
+  client_city: z.string().min(1, "Cidade do cliente é obrigatória"),
+  device_brand: z.string().min(1, "Marca do dispositivo é obrigatória"),
+  device_model: z.string().min(1, "Modelo do dispositivo é obrigatório"),
+  device_password: z.string().min(1, "Senha do dispositivo é obrigatória"),
+  device_serial: z.string().min(1, "Número de série do dispositivo é obrigatório"),
+  device_imei: z.string().min(1, "IMEI do dispositivo é obrigatório"),
+  device_accessories: z.string(),
+  device_additional_info: z.string(),
   terms: z.string().optional(),
-  termsTwo: z.string().optional(),
-  termsThree: z.string().optional(),
-  termsFour: z.string().optional(),
-  termsFive: z.string().optional(),
-  termsSix: z.string().optional(),
+  terms_two: z.string().optional(),
+  terms_three: z.string().optional(),
+  terms_four: z.string().optional(),
+  terms_five: z.string().optional(),
+  terms_six: z.string().optional(),
   bills: billSchema,
 })
 
 
 export function CreateOSDialog() {
-  const { register, handleSubmit, watch, control, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
+
+ // Função para formatar a data no formato DD/MM/YYYY
+ const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+// Configura o valor inicial do campo de data no formato DD/MM/YYYY
+useEffect(() => {
+  const today = new Date();
+  const formattedDate = formatDate(today);
+  setValue('date', formattedDate); // Define o valor inicial do campo
+}, [setValue]);
 
   const {fields, append, remove} = useFieldArray(
     {
@@ -97,7 +112,7 @@ export function CreateOSDialog() {
   )
 
   const generateOrderNumber = () => {
-    return Math.floor(Math.random() * 1000000000); // Gera um número aleatório
+    return Math.floor(Math.random() * 1000000); // Gera um número aleatório
   };
 
   const orderNumber = generateOrderNumber();
@@ -107,7 +122,7 @@ export function CreateOSDialog() {
   const bills = watch('bills') || []; // Garantir que seja um array
 
   // Calcular o valor total
-  const totalValue = Array.isArray(bills)
+  const total_value = Array.isArray(bills)
     ? bills.reduce((total, bill) => total + (bill.value || 0), 0)
     : 0;
 
@@ -129,7 +144,7 @@ export function CreateOSDialog() {
 
 
 const handleCreateOS = async (data) => {
-  const filteredData = { ...data, totalValue };
+  const filteredData = { ...data, total_value };
   
   // Remover os campos dos checkboxes não marcados
   if (!isCheckedTerms) delete filteredData.terms;
@@ -138,7 +153,7 @@ const handleCreateOS = async (data) => {
   if (!isCheckedTermsFour) delete filteredData.termsFour;
   if (!isCheckedTermsFive) delete filteredData.termsFive;
   if (!isCheckedTermsSix) delete filteredData.termsSix;
-
+  console.log('console logzao pra debug:',filteredData)
   try {
     const response = await fetch('https://service-order-php.vercel.app/order-services/create', {
       method: 'POST',
@@ -154,7 +169,7 @@ const handleCreateOS = async (data) => {
       console.error('Erro na resposta da rede:', response.status, response.statusText, errorText);
       throw new Error(`Erro na resposta da rede: ${response.statusText}`);
     }
-
+    console.log(filteredData)
     const result = await response.json();
     console.log('Dados enviados com sucesso:', result);
   } catch (error) {
@@ -162,19 +177,6 @@ const handleCreateOS = async (data) => {
   }
 };
 
-
-  const [logoPreview, setLogoPreview] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
@@ -202,34 +204,15 @@ const handleCreateOS = async (data) => {
               </div>
             </div>
 
-            <div className="space-y-2 ml-10">
-      <Label htmlFor="logo">Logotipo:</Label>
+            <div className="space-y-2 ml-10 mt-8">
       <div className="relative w-28 h-28 border border-gray-300 rounded overflow-hidden">
-        <Input
-          type="file"
-          id="logo"
-          accept="image/*"
-          {...register('logo')}
-          onChange={handleFileChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        {logoPreview ? (
-          <img
-            src={logoPreview}
-            alt="Preview"
-            className="w-full h-full object-cover"
-          />
-        ) : (
+       
           <div className="w-full h-full flex items-center justify-center text-gray-400">
             <span className="text-2xl">+</span>
           </div>
-        )}
+        
       </div>
-      {errors.logo && (
-        <p className="text-red-500 text-xs">
-          {errors.logo.message}
-        </p>
-      )}
+      
     </div>
             
           </div>
@@ -243,44 +226,44 @@ const handleCreateOS = async (data) => {
           <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Dados do Cliente</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="clientName">Nome do Cliente</Label>
-              <Input id="clientName" {...register('clientName')} />
-              {errors.clientName && <p className="text-red-500 text-xs">{errors.clientName.message}</p>}
+              <Label htmlFor="client_name">Nome do Cliente</Label>
+              <Input id="client_name" {...register('client_name')} />
+              {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientPhone">Telefone</Label>
-              <Input id="clientPhone" {...register('clientPhone')} />
-              {errors.clientPhone && <p className="text-red-500 text-xs">{errors.clientPhone.message}</p>}
+              <Label htmlFor="client_phone">Telefone</Label>
+              <Input id="client_phone" {...register('client_phone')} />
+              {errors.client_phone && <p className="text-red-500 text-xs">{errors.client_phone.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientDocument">Documento</Label>
-              <Input id="clientDocument" {...register('clientDocument')} />
-              {errors.clientDocument && <p className="text-red-500 text-xs">{errors.clientDocument.message}</p>}
+              <Label htmlFor="client_document">Documento</Label>
+              <Input id="client_document" {...register('client_document')} />
+              {errors.client_document && <p className="text-red-500 text-xs">{errors.client_document.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientZipCode">CEP</Label>
-              <Input id="clientZipCode" {...register('clientZipCode')} />
-              {errors.clientZipCode && <p className="text-red-500 text-xs">{errors.clientZipCode.message}</p>}
+              <Label htmlFor="client_zipcode">CEP</Label>
+              <Input id="client_zipcode" {...register('client_zipcode')} />
+              {errors.client_zipcode && <p className="text-red-500 text-xs">{errors.client_zipcode.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientAddress">Endereço</Label>
-              <Input id="clientAddress" {...register('clientAddress')} />
-              {errors.clientAddress && <p className="text-red-500 text-xs">{errors.clientAddress.message}</p>}
+              <Label htmlFor="client_address">Endereço</Label>
+              <Input id="client_address" {...register('client_address')} />
+              {errors.client_address && <p className="text-red-500 text-xs">{errors.client_address.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientNumber">Número</Label>
-              <Input id="clientNumber" {...register('clientNumber')} />
-              {errors.clientNumber && <p className="text-red-500 text-xs">{errors.clientNumber.message}</p>}
+              <Label htmlFor="client_number">Número</Label>
+              <Input id="client_number" {...register('client_number')} />
+              {errors.client_number && <p className="text-red-500 text-xs">{errors.client_number.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientState">Estado</Label>
-              <Input id="clientState" {...register('clientState')} />
-              {errors.clientState && <p className="text-red-500 text-xs">{errors.clientState.message}</p>}
+              <Label htmlFor="client_state">Estado</Label>
+              <Input id="client_state" {...register('client_state')} />
+              {errors.client_state && <p className="text-red-500 text-xs">{errors.client_state.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientCity">Cidade</Label>
-              <Input id="clientCity" {...register('clientCity')} />
-              {errors.clientCity && <p className="text-red-500 text-xs">{errors.clientCity.message}</p>}
+              <Label htmlFor="client_city">Cidade</Label>
+              <Input id="client_city" {...register('client_city')} />
+              {errors.client_city && <p className="text-red-500 text-xs">{errors.client_city.message}</p>}
             </div>
           </div>
         </div>
@@ -290,37 +273,37 @@ const handleCreateOS = async (data) => {
           <h2 className="text-lg font-semibold bg-[#29aae1] text-white  pl-2 py-2">Informações do Dispositivo</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="deviceBrand">Marca do Dispositivo</Label>
-              <Input id="deviceBrand" {...register('deviceBrand')} />
-              {errors.deviceBrand && <p className="text-red-500 text-xs">{errors.deviceBrand.message}</p>}
+              <Label htmlFor="device_brand">Marca do Dispositivo</Label>
+              <Input id="device_brand" {...register('device_brand')} />
+              {errors.device_brand && <p className="text-red-500 text-xs">{errors.device_brand.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deviceModel">Modelo</Label>
-              <Input id="deviceModel" {...register('deviceModel')} />
-              {errors.deviceModel && <p className="text-red-500 text-xs">{errors.deviceModel.message}</p>}
+              <Label htmlFor="device_model">Modelo</Label>
+              <Input id="device_model" {...register('device_model')} />
+              {errors.device_model && <p className="text-red-500 text-xs">{errors.device_model.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="devicePassword">Senha</Label>
-              <Input id="devicePassword" {...register('devicePassword')} />
-              {errors.devicePassword && <p className="text-red-500 text-xs">{errors.devicePassword.message}</p>}
+              <Label htmlFor="device_password">Senha</Label>
+              <Input id="device_password" {...register('device_password')} />
+              {errors.device_password && <p className="text-red-500 text-xs">{errors.device_password.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deviceSerial">Número de Série</Label>
-              <Input id="deviceSerial" {...register('deviceSerial')} />
-              {errors.deviceSerial && <p className="text-red-500 text-xs">{errors.deviceSerial.message}</p>}
+              <Label htmlFor="device_serial">Número de Série</Label>
+              <Input id="device_serial" {...register('device_serial')} />
+              {errors.device_serial && <p className="text-red-500 text-xs">{errors.device_serial.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deviceIMEI">IMEI</Label>
-              <Input id="deviceIMEI" {...register('deviceIMEI')} />
-              {errors.deviceIMEI && <p className="text-red-500 text-xs">{errors.deviceIMEI.message}</p>}
+              <Label htmlFor="device_imei">IMEI</Label>
+              <Input id="device_imei" {...register('device_imei')} />
+              {errors.device_imei && <p className="text-red-500 text-xs">{errors.device_imei.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deviceAccessories">Acessórios</Label>
-              <Input id="deviceAccessories" {...register('deviceAccessories')} />
+              <Label htmlFor="device_accessories">Acessórios</Label>
+              <Input id="device_accessories" {...register('device_accessories')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deviceAdditionalInfo">Informações Adicionais</Label>
-              <Input id="deviceAdditionalInfo" {...register('deviceAdditionalInfo')} />
+              <Label htmlFor="device_additional_info">Informações Adicionais</Label>
+              <Input id="device_additional_info" {...register('device_additional_info')} />
             </div>
             
           </div>
@@ -343,40 +326,40 @@ const handleCreateOS = async (data) => {
       style={{ "--primary":'#29aae1' }}
       onCheckedChange={handleCheckboxChangeTermsTwo}
       />
-            <Input id="termsTwo" {...(isCheckedTermsTwo ? {...register('termsTwo')} : {})}defaultValue='Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.'/>
-            {errors.termsTwo && <p className="text-red-500 text-xs">{errors.termsTwo.message}</p>}
+            <Input id="termsTwo" {...(isCheckedTermsTwo ? {...register('terms_two')} : {})}defaultValue='Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.'/>
+            {errors.terms_two && <p className="text-red-500 text-xs">{errors.terms_two.message}</p>}
           </div>
 
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
       onCheckedChange={handleCheckboxChangeTermsThree}/>
-            <Input id="termsThree" {...(isCheckedTermsThree ? {...register('termsThree')} : {})} defaultValue='Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.' />
-            {errors.termsThree && <p className="text-red-500 text-xs">{errors.termsThree.message}</p>}
+            <Input id="termsThree" {...(isCheckedTermsThree ? {...register('terms_three')} : {})} defaultValue='Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.' />
+            {errors.terms_three && <p className="text-red-500 text-xs">{errors.terms_three.message}</p>}
           </div>
 
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
       onCheckedChange={handleCheckboxChangeTermsFour}/>
-            <Input id="termsFour" {...(isCheckedTermsFour ? {...register('termsFour')} : {})} defaultValue='A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.'/>
-            {errors.termsFour && <p className="text-red-500 text-xs">{errors.termsFour.message}</p>}
+            <Input id="termsFour" {...(isCheckedTermsFour ? {...register('terms_four')} : {})} defaultValue='A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.'/>
+            {errors.terms_four && <p className="text-red-500 text-xs">{errors.terms_four.message}</p>}
           </div>
 
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
       onCheckedChange={handleCheckboxChangeTermsFive}/>
-            <Input id="termsFive" {...(isCheckedTermsFive ? {...register('termsFive')} : {})} defaultValue='Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.' />
-            {errors.termsFive && <p className="text-red-500 text-xs">{errors.termsFive.message}</p>}
+            <Input id="termsFive" {...(isCheckedTermsFive ? {...register('terms_five')} : {})} defaultValue='Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.' />
+            {errors.terms_five && <p className="text-red-500 text-xs">{errors.terms_five.message}</p>}
           </div>
 
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
       onCheckedChange={handleCheckboxChangeTermsSix}/>
-            <Input id="termsSix" {...(isCheckedTermsSix ? {...register('termsSix')} : {})} defaultValue='A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.' />
-            {errors.termsSix && <p className="text-red-500 text-xs">{errors.termsSix.message}</p>}
+            <Input id="termsSix" {...(isCheckedTermsSix ? {...register('terms_six')} : {})} defaultValue='A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.' />
+            {errors.terms_six && <p className="text-red-500 text-xs">{errors.terms_six.message}</p>}
           </div>
           
         </div>
@@ -390,13 +373,13 @@ const handleCreateOS = async (data) => {
       <span className="font-semibold w-40">Aparelho liga:</span>
       <div className="flex gap-2">
         <label className="flex items-center">
-          <input type="radio" value="YES" {...register('checklist.deviceTurnsOn')} className="mr-1" /> SIM
+          <input type="radio" value="YES" {...register('checklist.device_turns_on')} className="mr-1" /> SIM
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NO" {...register('checklist.deviceTurnsOn')} className="mr-1" /> NÃO
+          <input type="radio" value="NO" {...register('checklist.device_turns_on')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.deviceTurnsOn')} className="mr-1" defaultChecked /> NT
+          <input type="radio" value="NT" {...register('checklist.device_turns_on')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -422,13 +405,13 @@ const handleCreateOS = async (data) => {
       <span className="font-semibold w-40">Tela com Defeito:</span>
       <div className="flex gap-2">
         <label className="flex items-center">
-          <input type="radio" value="YES" {...register('checklist.faultyScreen')} className="mr-1" /> SIM
+          <input type="radio" value="YES" {...register('checklist.faulty_screen')} className="mr-1" /> SIM
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NO" {...register('checklist.faultyScreen')} className="mr-1" /> NÃO
+          <input type="radio" value="NO" {...register('checklist.faulty_screen')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.faultyScreen')} className="mr-1" defaultChecked /> NT
+          <input type="radio" value="NT" {...register('checklist.faulty_screen')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -544,13 +527,13 @@ const handleCreateOS = async (data) => {
       <span className="font-semibold w-40"> Camera Frontal:</span>
       <div className="flex gap-2">
         <label className="flex items-center">
-          <input type="radio" value="YES" {...register('checklist.frontalCamera')} className="mr-1" /> SIM
+          <input type="radio" value="YES" {...register('checklist.frontal_camera')} className="mr-1" /> SIM
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NO" {...register('checklist.frontalCamera')} className="mr-1" /> NÃO
+          <input type="radio" value="NO" {...register('checklist.frontal_camera')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.frontalCamera')} className="mr-1" defaultChecked  /> NT
+          <input type="radio" value="NT" {...register('checklist.frontal_camera')} className="mr-1" defaultChecked  /> NT
         </label>
       </div>
     </div>
@@ -574,13 +557,13 @@ const handleCreateOS = async (data) => {
       <span className="font-semibold w-40">Camera Traseira:</span>
       <div className="flex gap-2">
         <label className="flex items-center">
-          <input type="radio" value="YES" {...register('checklist.backCamera')} className="mr-1" /> SIM
+          <input type="radio" value="YES" {...register('checklist.back_camera')} className="mr-1" /> SIM
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NO" {...register('checklist.backCamera')} className="mr-1" /> NÃO
+          <input type="radio" value="NO" {...register('checklist.back_camera')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.backCamera')} className="mr-1" defaultChecked /> NT
+          <input type="radio" value="NT" {...register('checklist.back_camera')} className="mr-1" defaultChecked /> NT
         </label>
       </div>
     </div>
@@ -665,13 +648,13 @@ const handleCreateOS = async (data) => {
       <span className="font-semibold w-40">Sensor Frontal:</span>
       <div className="flex gap-2">
         <label className="flex items-center">
-          <input type="radio" value="YES" {...register('checklist.frontSensors')} className="mr-1" /> SIM
+          <input type="radio" value="YES" {...register('checklist.front_sensors')} className="mr-1" /> SIM
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NO" {...register('checklist.frontSensors')} className="mr-1" /> NÃO
+          <input type="radio" value="NO" {...register('checklist.front_sensors')} className="mr-1" /> NÃO
         </label>
         <label className="flex items-center">
-          <input type="radio" value="NT" {...register('checklist.frontSensors')} className="mr-1"defaultChecked  /> NT
+          <input type="radio" value="NT" {...register('checklist.front_sensors')} className="mr-1"defaultChecked  /> NT
         </label>
       </div>
 
@@ -761,7 +744,7 @@ const handleCreateOS = async (data) => {
 
 <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
   <p className="text-xl font-bold text-gray-800">
-    Valor Total: <span className="text-green-600">R$ {totalValue.toFixed(2)}</span>
+    Valor Total: <span className="text-green-600">R$ {total_value.toFixed(2)}</span>
   </p>
 </div>
 
