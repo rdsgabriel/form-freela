@@ -49,9 +49,11 @@ export default function Home() {
     fetchOrders();
   }, []);
 
+  const urlUpdate = `https://os.estoquefacil.net/api/api/order-services/update/${id}`
+
   const handleStatusChange = useCallback(async (id, newStatus) => {
     try {
-      const response = await fetch(`https://os.estoquefacil.net/api/api/order-services/update/${id}`, {
+      const response = await fetch(urlUpdate, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
