@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://os.estoquefacil.net/api/api/order-services');
+        const response = await fetch('https://os.estoquefacil.net/api/order-services');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -51,7 +51,7 @@ export default function Home() {
 
   const handleStatusChange = useCallback(async (id, newStatus) => {
     try {
-      const response = await fetch(`https://os.estoquefacil.net/api/api/order-services/update/${id}`, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

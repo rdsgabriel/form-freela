@@ -142,12 +142,12 @@ useEffect(() => {
   const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
   const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
 
-  const url = 'https://os.estoquefacil.net/api/api/order-services/create'
+  const url = 'https://os.estoquefacil.net/api/order-services/create'
 
 
 const handleCreateOS = async (data) => {
   const filteredData = { ...data, total_value };
-  
+
   // Remover os campos dos checkboxes não marcados
   if (!isCheckedTerms) delete filteredData.terms;
   if (!isCheckedTermsTwo) delete filteredData.termsTwo;
