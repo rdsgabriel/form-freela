@@ -142,6 +142,8 @@ useEffect(() => {
   const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
   const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
 
+  const url = 'https://os.estoquefacil.net/api/api/order-services/create'
+
 
 const handleCreateOS = async (data) => {
   const filteredData = { ...data, total_value };
@@ -155,7 +157,7 @@ const handleCreateOS = async (data) => {
   if (!isCheckedTermsSix) delete filteredData.termsSix;
   console.log('console logzao pra debug:',filteredData)
   try {
-    const response = await fetch('https://os.estoquefacil.net/api/api/order-services/create', {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
