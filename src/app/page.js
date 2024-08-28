@@ -31,20 +31,26 @@ export default function Home() {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const validData = data.map(order => ({
-          id: order.id || '',
-          number: order.number || '',
-          client_name: order.client_name || '',
-          status: order.status || 'Pendente'
-        }));
+        console.log('Dados recebidos da API:', data); // Verifique todos os dados recebidos
+        const validData = data.map(order => {
+          console.log('PDF URL:', order.pdf_url); // Verifique o pdf_url para cada pedido
+          return {
+            id: order.id || '',
+            number: order.number || '',
+            client_name: order.client_name || '',
+            status: order.status || 'Pendente',
+            pdf_url: order.pdf_url || ''  // Inclua pdf_url nos dados processados
+          };
+        });
         setOrders(validData);
         setFilteredOrders(validData);
       } catch (error) {
         console.error("Erro ao buscar os dados da API:", error);
       } finally {
-        setLoading(false); // Defina loading como false após carregar os dados
+        setLoading(false);
       }
     };
+    
 
     fetchOrders();
   }, []);
@@ -201,9 +207,15 @@ export default function Home() {
                       </DropdownMenu>
                     </TableCell>
                     <TableCell>
-                      <Button type='button' variant='outline' className='hover:text-[#29aae1]'>
+                      <a href={order.pdf_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                        className="inline-flex items-center text-blue-600 hover:text-blue-800">
+                        <Button type='button' variant='outline' className='hover:text-[#29aae1]'>
                         <DownloadIcon className="w-4" />
                       </Button>
+                      </a>
                     </TableCell>
                   </TableRow>
                 ))}
