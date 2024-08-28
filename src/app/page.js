@@ -216,7 +216,7 @@ export default function Home() {
                       </DropdownMenu>
                     </TableCell>
                     <TableCell>
-                      <a href={`https://os.estoquefacil.net/storage/app/public/pdfs/order_service_${order.number}.pdf`}
+                      <a href={`https://os.estoquefacil.net/storage/app/public/pdfs/OS_${order.number}.pdf`}
                         target="_blank"
                         rel="noopener noreferrer"
                         download
