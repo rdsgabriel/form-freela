@@ -1,5 +1,3 @@
-
-
 import { Button } from './ui/button';
 import { Checkbox } from "./ui/checkbox";
 import {
@@ -178,6 +176,7 @@ const handleCreateOS = async (data) => {
     console.log('Dados enviados com sucesso:', result);
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
+    console.error('mais detalhado:', error.message)
   }
 };
 
