@@ -155,7 +155,6 @@ const handleCreateOS = async (data) => {
   if (!isCheckedTermsFour) delete filteredData.termsFour;
   if (!isCheckedTermsFive) delete filteredData.termsFive;
   if (!isCheckedTermsSix) delete filteredData.termsSix;
-  console.log('console logzao pra debug:',filteredData)
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -167,14 +166,13 @@ const handleCreateOS = async (data) => {
     });
 
     if (!response.ok) {
-      console.log(filteredData)
       const errorText = await response.text();
       console.error('Erro na resposta da rede:', response.status, response.statusText, errorText);
       throw new Error(`Erro na resposta da rede: ${response.statusText}`);
     }
-    console.log(filteredData)
+   
     const result = await response.json();
-    console.log('Dados enviados com sucesso:', result);
+    
 
     window.location.reload();
   } catch (error) {

@@ -31,9 +31,7 @@ export default function Home() {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log('Dados recebidos da API:', data); // Verifique todos os dados recebidos
         const validData = data.map(order => {
-          console.log('PDF URL:', order.pdf_url); // Verifique o pdf_url para cada pedido
           return {
             id: order.id || '',
             number: order.number || '',
