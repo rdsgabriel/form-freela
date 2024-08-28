@@ -110,7 +110,8 @@ useEffect(() => {
   )
 
   const generateOrderNumber = () => {
-    return Math.floor(Math.random() * 1000000); // Gera um número aleatório
+    const orderNumber = Math.floor(Math.random() * 1000000); // Gera um número aleatório
+    return orderNumber.toString().padStart(6, '0'); // Garante que o número tenha 6 dígitos
   };
 
   const orderNumber = generateOrderNumber();
