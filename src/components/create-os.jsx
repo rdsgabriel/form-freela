@@ -143,9 +143,8 @@ useEffect(() => {
 
   const url = '/api/order-services/create';
 
-
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitButtonRef = useRef(null);
 
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
@@ -159,9 +158,8 @@ useEffect(() => {
     if (!isCheckedTermsSix) delete filteredData.termsSix;
 
     try {
-      if (isSubmitting) return; // Impede novas ações se já estiver enviando
-
       setIsSubmitting(true); // Define o estado de envio como verdadeiro
+      if (submitButtonRef.current) submitButtonRef.current.disabled = true; // Desativa o botão
 
       const response = await fetch(url, {
         method: 'POST',
@@ -179,18 +177,16 @@ useEffect(() => {
       }
 
       const result = await response.json();
-      
-      // Opção: Adicione lógica de sucesso aqui se necessário
+
       window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
-      // Opção: Adicione lógica de erro aqui se necessário
+      // Reativa o botão em caso de erro
+      if (submitButtonRef.current) submitButtonRef.current.disabled = false;
     } finally {
       setIsSubmitting(false); // Define o estado de envio como falso após o processamento
     }
   };
-
-
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
@@ -770,18 +766,16 @@ useEffect(() => {
       )}
       </div>
 
-      <DialogFooter>
-      <Button
-        className="bg-[#29aae1] hover:bg-cyan-500"
-        type="submit"
-        disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
-      >
-        Criar
-      </Button>
-      <DialogClose asChild className="ml-2">
-        <Button variant='outline'>Cancelar</Button>
-      </DialogClose>
-    </DialogFooter>
+        <DialogFooter>
+          <Button className="bg-[#29aae1] hover:bg-cyan-500"
+          type="submit"
+          ref={submitButtonRef} // Referência para o botão
+          disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
+          >Criar</Button>
+          <DialogClose asChild className="ml-2">
+            <Button variant='outline' >Cancelar</Button>
+            </DialogClose>
+        </DialogFooter>
       </form>
     </DialogContent>
   );
