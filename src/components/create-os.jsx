@@ -69,7 +69,7 @@ const createOSSchema = z.object({
   device_model: z.string().min(1, "Modelo do dispositivo é obrigatório"),
   device_password: z.string().min(1, "Senha do dispositivo é obrigatória"),
   device_serial: z.string().min(1, "Número de série do dispositivo é obrigatório"),
-  device_imei: z.string().min(1, "IMEI do dispositivo é obrigatório"),
+  device_imei: z.string().min(15, "IMEI do dispositivo é obrigatório ter no mínimo 15 digitos."),
   device_accessories: z.string(),
   device_additional_info: z.string(),
   terms: z.string().optional(),
