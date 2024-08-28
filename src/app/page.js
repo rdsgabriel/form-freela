@@ -123,9 +123,21 @@ export default function Home() {
     }
   };
 
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className='bg-[#f5fcff] w-full h-full'>
+      <div className='m-4'>
+      <Button onClick={handleGoBack} className='bg-[#29aae1] hover:bg-cyan-500' >
+       <ChevronLeft className='w-5 h-5 mr-1'/>
+         Voltar
+      </Button>
+      </div>
       <div className="p-6 max-w-5xl mx-auto space-y-4 bg-white mt-20 rounded-xl shadow-xl">
+
+     
         <h1 className="text-3xl font-extrabold pb-2 text-[#080b16]">Ordens de Serviço</h1>
         <div className="flex items-center justify-between">
           <Dialog>
