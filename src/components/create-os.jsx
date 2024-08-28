@@ -142,7 +142,8 @@ useEffect(() => {
   const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
   const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
 
-  const url = 'https://os.estoquefacil.net/api/order-services/create'
+  const url = '/api/order-services/create';
+
 
 
 const handleCreateOS = async (data) => {
@@ -163,6 +164,7 @@ const handleCreateOS = async (data) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(filteredData),
+      mode:'cors',
     });
 
     if (!response.ok) {
