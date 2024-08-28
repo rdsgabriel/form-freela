@@ -174,6 +174,8 @@ const handleCreateOS = async (data) => {
     console.log(filteredData)
     const result = await response.json();
     console.log('Dados enviados com sucesso:', result);
+
+    window.location.reload();
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
   }
