@@ -767,11 +767,34 @@ useEffect(() => {
       </div>
 
         <DialogFooter>
-          <Button className="bg-[#29aae1] hover:bg-cyan-500"
+        {isSubmitting ? (
+        <div className="flex justify-center items-center h-32">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className='animate-spin text-[#29aae1]'
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        </div>
+      ) : (
+        <Button
+          className="bg-[#29aae1] hover:bg-cyan-500"
           type="submit"
           ref={submitButtonRef} // Referência para o botão
           disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
-          >Criar</Button>
+          onClick={() => handleCreateOS(data)} // Chama handleCreateOS com os dados necessários
+        >
+          Criar
+        </Button>
+      )}
           <DialogClose asChild className="ml-2">
             <Button variant='outline' >Cancelar</Button>
             </DialogClose>
