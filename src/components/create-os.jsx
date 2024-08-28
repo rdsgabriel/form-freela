@@ -145,40 +145,51 @@ useEffect(() => {
 
 
 
-const handleCreateOS = async (data) => {
-  const filteredData = { ...data, total_value };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Remover os campos dos checkboxes não marcados
-  if (!isCheckedTerms) delete filteredData.terms;
-  if (!isCheckedTermsTwo) delete filteredData.termsTwo;
-  if (!isCheckedTermsThree) delete filteredData.termsThree;
-  if (!isCheckedTermsFour) delete filteredData.termsFour;
-  if (!isCheckedTermsFive) delete filteredData.termsFive;
-  if (!isCheckedTermsSix) delete filteredData.termsSix;
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(filteredData),
-      mode:'cors',
-    });
+  const handleCreateOS = async (data) => {
+    const filteredData = { ...data, total_value };
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Erro na resposta da rede:', response.status, response.statusText, errorText);
-      throw new Error(`Erro na resposta da rede: ${response.statusText}`);
+    // Remover os campos dos checkboxes não marcados
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
+    if (!isCheckedTermsThree) delete filteredData.termsThree;
+    if (!isCheckedTermsFour) delete filteredData.termsFour;
+    if (!isCheckedTermsFive) delete filteredData.termsFive;
+    if (!isCheckedTermsSix) delete filteredData.termsSix;
+
+    try {
+      if (isSubmitting) return; // Impede novas ações se já estiver enviando
+
+      setIsSubmitting(true); // Define o estado de envio como verdadeiro
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filteredData),
+        mode: 'cors',
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Erro na resposta da rede:', response.status, response.statusText, errorText);
+        throw new Error(`Erro na resposta da rede: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      // Opção: Adicione lógica de sucesso aqui se necessário
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      // Opção: Adicione lógica de erro aqui se necessário
+    } finally {
+      setIsSubmitting(false); // Define o estado de envio como falso após o processamento
     }
-   
-    const result = await response.json();
-    
+  };
 
-    window.location.reload();
-  } catch (error) {
-    console.error('Erro ao enviar dados:', error);
-  }
-};
 
 
   return (
@@ -759,11 +770,18 @@ const handleCreateOS = async (data) => {
       )}
       </div>
 
-        <DialogFooter>
-          <Button className="bg-[#29aae1] hover:bg-cyan-500" type="submit">Criar</Button>
-          <DialogClose asChild className="ml-2">
-            <Button variant='outline' >Cancelar</Button></DialogClose>
-        </DialogFooter>
+      <DialogFooter>
+      <Button
+        className="bg-[#29aae1] hover:bg-cyan-500"
+        type="submit"
+        disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
+      >
+        Criar
+      </Button>
+      <DialogClose asChild className="ml-2">
+        <Button variant='outline'>Cancelar</Button>
+      </DialogClose>
+    </DialogFooter>
       </form>
     </DialogContent>
   );
