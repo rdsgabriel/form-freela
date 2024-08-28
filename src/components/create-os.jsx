@@ -92,7 +92,7 @@ export function CreateOSDialog() {
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  return `${day}-${month}-${year}`;
 };
 
 // Configura o valor inicial do campo de data no formato DD/MM/YYYY
@@ -176,7 +176,6 @@ const handleCreateOS = async (data) => {
     console.log('Dados enviados com sucesso:', result);
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
-    console.error('mais detalhado:', error.message)
   }
 };
 
