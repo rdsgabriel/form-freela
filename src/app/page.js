@@ -49,30 +49,42 @@ export default function Home() {
     fetchOrders();
   }, []);
 
-  const handleStatusChange = useCallback(async (id, newStatus) => {
-    try {
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: newStatus })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update status');
+  const handleStatusChange = useCallback((id, newStatus) => {
+    // Atualizar o estado imediatamente
+    const updatedOrders = orders.map(order =>
+      order.id === id ? { ...order, status: newStatus } : order
+    );
+    setOrders(updatedOrders);
+    setFilteredOrders(filterOrders(updatedOrders));
+  
+    // Em seguida, enviar a requisição para o servidor
+    const updateStatusOnServer = async () => {
+      try {
+        const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to update status');
+        }
+      } catch (error) {
+        console.error("Erro ao atualizar o status:", error);
+        // Caso haja um erro, você pode optar por reverter a mudança visual
+        const revertedOrders = orders.map(order =>
+          order.id === id ? { ...order, status: orders.find(o => o.id === id).status } : order
+        );
+        setOrders(revertedOrders);
+        setFilteredOrders(filterOrders(revertedOrders));
       }
-
-      const updatedOrders = orders.map(order =>
-        order.id === id ? { ...order, status: newStatus } : order
-      );
-      setOrders(updatedOrders);
-      setFilteredOrders(filterOrders(updatedOrders));
-    } catch (error) {
-      console.error("Erro ao atualizar o status:", error);
-    }
+    };
+  
+    updateStatusOnServer();
   }, [orders]);
-
+  
   const handleFilter = (filters) => {
     setFilteredOrders(filterOrders(orders, filters));
   };
