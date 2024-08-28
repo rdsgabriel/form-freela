@@ -766,9 +766,9 @@ useEffect(() => {
       )}
       </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex justify-center items-center">
         {isSubmitting ? (
-        <div className="flex justify-center items-center h-32">
+        <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -790,7 +790,6 @@ useEffect(() => {
           type="submit"
           ref={submitButtonRef} // Referência para o botão
           disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
-          onClick={() => handleCreateOS(data)} // Chama handleCreateOS com os dados necessários
         >
           Criar
         </Button>
