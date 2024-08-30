@@ -1,11 +1,13 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { PlusCircle, DownloadIcon, ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
+import { PlusCircle, DownloadIcon, ChevronDown, ChevronRight, ChevronLeft, Trash, Pencil, Ellipsis} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table";
 import { OSFilters } from "@/components/os-filters";
 import { CreateOSDialog } from "@/components/create-os";
+import { UpdateOSDialog } from "@/components/update-os";
+
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const removeAccents = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -30,14 +32,59 @@ export default function Home() {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        
         const data = await response.json();
         const validData = data.map(order => {
           return {
-            id: order.id || '',
-            number: order.number || '',
-            client_name: order.client_name || '',
-            status: order.status || 'Pendente',
-            pdf_url: order.pdf_url || ''  // Inclua pdf_url nos dados processados
+        id: order.id || '',
+        number: order.number || '',
+        client_name: order.client_name || '',
+        client_phone: order.client_phone || '',
+        client_document: order.client_document || '',
+        client_zipcode: order.client_zipcode || '',
+        client_address: order.client_address || '',
+        client_number: order.client_number || '',
+        client_state: order.client_state || '',
+        client_city: order.client_city || '',
+        device_brand: order.device_brand || '',
+        device_model: order.device_model || '',
+        device_password: order.device_password || '',
+        device_serial: order.device_serial || '',
+        device_imei: order.device_imei || '',
+        device_accessories: order.device_accessories || '',
+        device_additional_info: order.device_additional_info || '',
+        terms: order.terms || '',
+        terms_two: order.terms_two || '',
+        terms_three: order.terms_three || '',
+        terms_four: order.terms_four || '',
+        terms_five: order.terms_five || '',
+        terms_six: order.terms_six || '',
+        bills: order.bills || {},
+        checklist: order.checklist || {
+          device_turns_on: '',
+          faulty_screen: '',
+          restarting: '',
+          locked: '',
+          network: '',
+          wifi: '',
+          headset: '',
+          microphone: '',
+          speaker: '',
+          frontal_camera: '',
+          back_camera: '',
+          biometry: '',
+          front_sensors: '',
+          touch: '',
+          buttons: '',
+          keyboard: '',
+          casing: '',
+          charger: '',
+          backup: '',
+        },
+        logo: order.logo || null,
+        date: order.date || '',
+        pdf_url: order.pdf_url || '',
+            
           };
         });
         setOrders(validData);
@@ -124,6 +171,28 @@ export default function Home() {
     window.history.back();
   };
 
+  const handleDelete = async (id) => {
+    // Remover imediatamente a ordem de serviço da interface
+    setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
+    setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.id !== id));
+  
+    try {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/del/${id}`, {
+        method: 'DELETE'
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao deletar a ordem de serviço');
+      }
+  
+    
+    } catch (error) {
+      console.error('Erro ao excluir a ordem de serviço:', error);
+      
+      
+    }
+  };
+
   return (
     <div className='bg-[#f5fcff] w-full h-full'>
       <div className='m-4'>
@@ -176,7 +245,8 @@ export default function Home() {
                   <TableHead className='text-white rounded-tl-lg'>ID da OS</TableHead>
                   <TableHead className='text-white'>Cliente</TableHead>
                   <TableHead className='text-white'>Status</TableHead>
-                  <TableHead className='text-white rounded-tr-lg'>PDF</TableHead>
+                  <TableHead className='text-white'>PDF</TableHead>
+                  <TableHead className='text-white rounded-tr-lg'></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -226,6 +296,37 @@ export default function Home() {
                       </Button>
                       </a>
                     </TableCell>
+                    <TableCell>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          
+                            <Ellipsis className="ml-2 w-4 h-4 cursor-pointer" />
+                          
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent>
+                          
+                          <DropdownMenuItem
+                          className='text-red-500'
+                          onClick={() => handleDelete(order.id)}
+                          >
+                            <Trash className="mr-2 w-4" />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+
+                    <Dialog>
+                          <DialogTrigger asChild>
+                          <span className='flex'>
+                          <Pencil className="mr-2 w-4" />
+                          Editar
+                          </span>
+                          </DialogTrigger>
+                          <UpdateOSDialog order={order}/>
+                      </Dialog>
+                        
                   </TableRow>
                 ))}
               </TableBody>
