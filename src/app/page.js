@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger,  } from "@/components/ui/dialog";
 import { PlusCircle, DownloadIcon, ChevronDown, ChevronRight, ChevronLeft, Trash, Pencil, Ellipsis} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table";
@@ -8,7 +8,7 @@ import { OSFilters } from "@/components/os-filters";
 import { CreateOSDialog } from "@/components/create-os";
 import { UpdateOSDialog } from "@/components/update-os";
 
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from "@/components/ui/dropdown-menu";
 
 const removeAccents = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
@@ -193,6 +193,17 @@ export default function Home() {
     }
   };
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleEditClick = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  
   return (
     <div className='bg-[#f5fcff] w-full h-full'>
       <div className='m-4'>
@@ -297,35 +308,41 @@ export default function Home() {
                       </a>
                     </TableCell>
                     <TableCell>
+                    
                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          
-                            <Ellipsis className="ml-2 w-4 h-4 cursor-pointer" />
-                          
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent>
-                          
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-2 text-gray-600 hover:text-gray-900">
+                          <Ellipsis className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuContent className="w-48 p-2 bg-white shadow-lg rounded-lg">
                           <DropdownMenuItem
-                          className='text-red-500'
-                          onClick={() => handleDelete(order.id)}
+                            className="flex items-center p-2 text-[#29aae1] hover:bg-blue-50 rounded-lg"
+                            onClick={handleEditClick}
                           >
-                            <Trash className="mr-2 w-4" />
+                            <Pencil className="mr-2 w-4 h-4" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={handleDelete}
+                            className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          >
+                            <Trash className="mr-2 w-4 h-4" />
                             Excluir
                           </DropdownMenuItem>
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenuPortal>
+                    </DropdownMenu>
+                                    
+                    {isDialogOpen && (
+        <Dialog open onOpenChange={handleCloseDialog}>
+          <UpdateOSDialog order={order} onClose={handleCloseDialog} />
+        </Dialog>
+      )}
                     </TableCell>
 
-                    <Dialog>
-                          <DialogTrigger asChild>
-                          <span className='flex'>
-                          <Pencil className="mr-2 w-4" />
-                          Editar
-                          </span>
-                          </DialogTrigger>
-                          <UpdateOSDialog order={order}/>
-                      </Dialog>
+                  
                         
                   </TableRow>
                 ))}
@@ -333,6 +350,8 @@ export default function Home() {
             </Table>
           )}
         </div>
+         
+      
 
         {/* Controles de Paginação */}
         <div className="flex justify-between items-center mt-4">

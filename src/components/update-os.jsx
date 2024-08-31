@@ -166,6 +166,8 @@ export function UpdateOSDialog({ order }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
+  const url = `/api/order-services/update/${order.id}`;
+
   const handleUpdateOS = async (data) => {
     console.log('Dados recebidos do formulário:', data); // Verifique os dados recebidos do formulário
   
@@ -184,7 +186,7 @@ export function UpdateOSDialog({ order }) {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
   
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${order.id}`, {
+      const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
