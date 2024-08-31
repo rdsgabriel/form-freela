@@ -1,5 +1,17 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { Dialog, DialogTrigger,  } from "@/components/ui/dialog";
 import { PlusCircle, DownloadIcon, ChevronDown, ChevronRight, ChevronLeft, Trash, Pencil, Ellipsis} from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -203,6 +215,14 @@ export default function Home() {
     setIsDialogOpen(false);
   };
 
+  const [isDialogDelete, setIsDialogDelete] = useState(false);
+
+  // Função para abrir o diálogo de exclusão
+  const openDeleteDialog = () => {
+    setIsDialogDelete(true);
+  };
+
+
   
   return (
     <div className='bg-[#f5fcff] w-full h-full'>
@@ -325,7 +345,8 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={handleDelete}
+                            onClick={openDeleteDialog}
+                              
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
                             <Trash className="mr-2 w-4 h-4" />
@@ -334,6 +355,29 @@ export default function Home() {
                         </DropdownMenuContent>
                       </DropdownMenuPortal>
                     </DropdownMenu>
+
+                    {isDialogDelete && (
+        <AlertDialog  open onOpenChange={setIsDialogDelete} className='bg-black/10 bg-opacity-30'>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className='text-xl'>Tem certeza de que deseja excluir a OS?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta ação não pode ser desfeita. Isso excluirá permanentemente a Ordem de Serviço.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              
+              <AlertDialogAction onClick={() => handleDelete(order.id)}
+                className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
+                >Excluir</AlertDialogAction>
+
+<AlertDialogCancel>Cancelar</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+                  
+                    
                                     
                     {isDialogOpen && (
         <Dialog open onOpenChange={handleCloseDialog}>
