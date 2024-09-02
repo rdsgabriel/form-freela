@@ -96,15 +96,16 @@ export function UpdateOSDialog({ order }) {
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
 
 
-  useEffect((order) => {
-    // Define os valores iniciais dos checkboxes apenas uma vez
-    setIsCheckedTerms(order.is_checked_terms);
-    setIsCheckedTermsTwo(order.is_checked_terms_two);
-    setIsCheckedTermsThree(order.is_checked_terms_three);
-    setIsCheckedTermsFour(order.is_checked_terms_four);
-    setIsCheckedTermsFive(order.is_checked_terms_five);
-    setIsCheckedTermsSix(order._checked_terms_six);
-  }, []);
+  useEffect(() => {
+    if(order){
+      setIsCheckedTerms(order.is_checked_terms);
+      setIsCheckedTermsTwo(order.is_checked_terms_two);
+      setIsCheckedTermsThree(order.is_checked_terms_three);
+      setIsCheckedTermsFour(order.is_checked_terms_four);
+      setIsCheckedTermsFive(order.is_checked_terms_five);
+      setIsCheckedTermsSix(order._checked_terms_six);
+    }
+  }, [order]);
 
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
