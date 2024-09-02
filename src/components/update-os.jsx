@@ -157,14 +157,15 @@ export function UpdateOSDialog({ order }) {
     });
 
     // Define os campos de bills
-    if (order.bills) {
+    if (Array.isArray(order.bills)) {
       order.bills.forEach((bill, index) => {
         setValue(`bills.${index}.value`, bill.value || 0); // Define um valor padrão 0 se não houver valor
         setValue(`bills.${index}.amount`, bill.amount || 0);
         setValue(`bills.${index}.description`, bill.description || ''); // Define uma descrição padrão vazia se não houver descrição
       });
-    }
-  };
+    } else {
+      console.error('order.bills não é um array:', order.bills);
+    }}
 
   // Obtenha os valores do campo 'bills'
   const bills = watch('bills') || []; // Garantir que seja um array
