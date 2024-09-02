@@ -135,7 +135,8 @@ export default function Home() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ status: newStatus })
+          body: JSON.stringify({ status: newStatus }),
+          mode: 'cors',
         });
   
         if (!response.ok) {
