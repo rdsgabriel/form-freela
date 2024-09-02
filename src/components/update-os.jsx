@@ -96,7 +96,7 @@ export function UpdateOSDialog({ order }) {
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
 
   console.log(order)
-  console.log(isCheckedTerms)
+  
 
   useEffect(() => {
     if(order){
@@ -108,6 +108,8 @@ export function UpdateOSDialog({ order }) {
       setIsCheckedTermsSix(order.is_checked_terms_six);
     }
   }, [order]);
+
+  console.log(isCheckedTerms)
 
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
