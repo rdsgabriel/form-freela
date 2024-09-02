@@ -73,6 +73,12 @@ export default function Home() {
         terms_four: order.terms_four || '',
         terms_five: order.terms_five || '',
         terms_six: order.terms_six || '',
+        is_checked_terms: order.is_checked_terms,
+        is_checked_terms_two: order.is_checked_terms_two,
+        is_checked_terms_three: order.is_checked_terms_three,
+        is_checked_terms_four: order.is_checked_terms_four,
+        is_checked_terms_five: order.is_checked_terms_five,
+        is_checked_terms_six: order.is_checked_terms_six,
         bills: order.bills || {},
         checklist: order.checklist || {
           device_turns_on: '',
