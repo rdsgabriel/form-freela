@@ -109,8 +109,6 @@ export function UpdateOSDialog({ order }) {
     }
   }, [order]);
 
-  console.log(isCheckedTerms)
-
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
     const [year, month, day] = date.split('-');
