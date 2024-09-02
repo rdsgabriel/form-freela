@@ -142,6 +142,8 @@ export function CreateOSDialog() {
     return orderNumber.toString().padStart(6, '0');
   };
 
+  console.log(isCheckedTerms);
+
   const orderNumber = generateOrderNumber();
 
   const bills = watch('bills') || [];
