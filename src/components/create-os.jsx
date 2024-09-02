@@ -157,7 +157,7 @@ export function CreateOSDialog() {
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-    console.log(filteredData)
+    console.log('debugando:',filteredData)
 
     try {
       setIsSubmitting(true);
