@@ -132,13 +132,21 @@ export function UpdateOSDialog({ order }) {
     // Define o campo logo
     setValue('logo', order.logo || null); // Define null se logo não estiver presente
 
+    const setFormValues = (order) => {
+      setValue('terms', order.terms || 'A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.');
+      setValue('terms_two', order.terms_two || 'Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.');
+      setValue('terms_three', order.terms_three || 'Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.');
+      setValue('terms_four', order.terms_four || 'A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.');
+      setValue('terms_five', order.terms_five || 'Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.');
+      setValue('terms_six', order.terms_six || 'A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.');
+    };
+
     // Define os campos restantes
     const fields = [
       'number', 'client_name', 'client_phone', 'client_document',
       'client_zipcode', 'client_address', 'client_number', 'client_state',
       'client_city', 'device_brand', 'device_model', 'device_password',
       'device_serial', 'device_imei', 'device_accessories', 'device_additional_info',
-      'terms', 'terms_two', 'terms_three', 'terms_four', 'terms_five', 'terms_six'
     ];
 
     fields.forEach(field => {
@@ -355,6 +363,7 @@ export function UpdateOSDialog({ order }) {
         <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTerms}
       onCheckedChange={handleCheckboxChangeTerms}
       />
             <Input id="terms" {...(isCheckedTerms ? {...register('terms')} : {})} defaultValue='A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.' />

@@ -142,7 +142,7 @@ export function CreateOSDialog() {
     return orderNumber.toString().padStart(6, '0');
   };
 
-  console.log(isCheckedTerms);
+
 
   const orderNumber = generateOrderNumber();
 
@@ -176,7 +176,7 @@ export function CreateOSDialog() {
       }
 
       const result = await response.json();
-      console.log(result)
+
       window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
