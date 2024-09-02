@@ -117,12 +117,12 @@ export function CreateOSDialog() {
     setValue,
   ]);
 
-  const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e.target.checked);
-  const handleCheckboxChangeTermsTwo = (e) => setIsCheckedTermsTwo(e.target.checked);
-  const handleCheckboxChangeTermsThree = (e) => setIsCheckedTermsThree(e.target.checked);
-  const handleCheckboxChangeTermsFour = (e) => setIsCheckedTermsFour(e.target.checked);
-  const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e.target.checked);
-  const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e.target.checked);
+  const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
+  const handleCheckboxChangeTermsTwo = (e) => setIsCheckedTermsTwo(e);
+  const handleCheckboxChangeTermsThree = (e) => setIsCheckedTermsThree(e);
+  const handleCheckboxChangeTermsFour = (e) => setIsCheckedTermsFour(e);
+  const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
+  const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
 
   const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
@@ -184,7 +184,6 @@ export function CreateOSDialog() {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
