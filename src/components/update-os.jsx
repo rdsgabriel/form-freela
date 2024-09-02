@@ -95,6 +95,7 @@ export function UpdateOSDialog({ order }) {
 
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
 
+  console.log(order)
 
   useEffect(() => {
     if(order){
@@ -834,7 +835,7 @@ export function UpdateOSDialog({ order }) {
         <Button
           className="bg-[#29aae1] hover:bg-cyan-500"
           type="submit"
-          ref={submitButtonRef} 
+          ref={submitButtonRef}
           disabled={isSubmitting}
         >
           Atualizar
