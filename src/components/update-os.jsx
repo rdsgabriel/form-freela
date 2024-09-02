@@ -103,7 +103,7 @@ export function UpdateOSDialog({ order }) {
       setIsCheckedTermsThree(order.is_checked_terms_three);
       setIsCheckedTermsFour(order.is_checked_terms_four);
       setIsCheckedTermsFive(order.is_checked_terms_five);
-      setIsCheckedTermsSix(order._checked_terms_six);
+      setIsCheckedTermsSix(order.is_checked_terms_six);
     }
   }, [order]);
 
