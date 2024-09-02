@@ -132,14 +132,14 @@ export function UpdateOSDialog({ order }) {
     // Define o campo logo
     setValue('logo', order.logo || null); // Define null se logo não estiver presente
 
-    const setFormValues = (order) => {
+
       setValue('terms', order.terms || 'A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.');
       setValue('terms_two', order.terms_two || 'Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.');
       setValue('terms_three', order.terms_three || 'Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.');
       setValue('terms_four', order.terms_four || 'A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.');
       setValue('terms_five', order.terms_five || 'Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.');
       setValue('terms_six', order.terms_six || 'A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.');
-    };
+
 
     // Define os campos restantes
     const fields = [
@@ -373,6 +373,7 @@ export function UpdateOSDialog({ order }) {
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTermsTwo}
       onCheckedChange={handleCheckboxChangeTermsTwo}
       />
             <Input id="termsTwo" {...(isCheckedTermsTwo ? {...register('terms_two')} : {})}defaultValue='Dispositivos que não ligam ou têm a tela quebrada não são de nossa responsabilidade por defeitos além dos descritos nesta ordem de serviço, e não há possibilidade de testar o mesmo.'/>
@@ -382,6 +383,7 @@ export function UpdateOSDialog({ order }) {
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTermsThree}
       onCheckedChange={handleCheckboxChangeTermsThree}/>
             <Input id="termsThree" {...(isCheckedTermsThree ? {...register('terms_three')} : {})} defaultValue='Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.' />
             {errors.terms_three && <p className="text-red-500 text-xs">{errors.terms_three.message}</p>}
@@ -390,6 +392,7 @@ export function UpdateOSDialog({ order }) {
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTermsFour}
       onCheckedChange={handleCheckboxChangeTermsFour}/>
             <Input id="termsFour" {...(isCheckedTermsFour ? {...register('terms_four')} : {})} defaultValue='A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.'/>
             {errors.terms_four && <p className="text-red-500 text-xs">{errors.terms_four.message}</p>}
@@ -398,6 +401,7 @@ export function UpdateOSDialog({ order }) {
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTermsFive}
       onCheckedChange={handleCheckboxChangeTermsFive}/>
             <Input id="termsFive" {...(isCheckedTermsFive ? {...register('terms_five')} : {})} defaultValue='Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.' />
             {errors.terms_five && <p className="text-red-500 text-xs">{errors.terms_five.message}</p>}
@@ -406,6 +410,7 @@ export function UpdateOSDialog({ order }) {
           <div className="space-y-2 flex gap-2 items-center">
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
       style={{ "--primary":'#29aae1' }}
+      checked={isCheckedTermsSix}
       onCheckedChange={handleCheckboxChangeTermsSix}/>
             <Input id="termsSix" {...(isCheckedTermsSix ? {...register('terms_six')} : {})} defaultValue='A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.' />
             {errors.terms_six && <p className="text-red-500 text-xs">{errors.terms_six.message}</p>}
