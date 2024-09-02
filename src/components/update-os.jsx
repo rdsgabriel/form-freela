@@ -195,6 +195,7 @@ export function UpdateOSDialog({ order }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
+  console.log(isSubmitting)
 
   console.log('Errors:', errors);
 
@@ -205,7 +206,17 @@ export function UpdateOSDialog({ order }) {
     console.log('Dados recebidos do formulário:', data); // Verifique os dados recebidos do formulário
   
     // Combine os dados do formulário com o valor total
-    const filteredData = { ...data, total_value };
+    const filteredData = {
+      ...data,
+      total_value,
+      is_checked_terms: isCheckedTerms,
+      is_checked_terms_two: isCheckedTermsTwo,
+      is_checked_terms_three: isCheckedTermsThree,
+      is_checked_terms_four: isCheckedTermsFour,
+      is_checked_terms_five: isCheckedTermsFive,
+      is_checked_terms_six: isCheckedTermsSix,
+    };
+
   
     // Remove campos não marcados
     if (!isCheckedTerms) delete filteredData.terms;
@@ -214,6 +225,8 @@ export function UpdateOSDialog({ order }) {
     if (!isCheckedTermsFour) delete filteredData.termsFour;
     if (!isCheckedTermsFive) delete filteredData.termsFive;
     if (!isCheckedTermsSix) delete filteredData.termsSix;
+
+    console.log('Dados filtrados:', filteredData)
   
     try {
       setIsSubmitting(true);
