@@ -74,12 +74,12 @@ const createOSSchema = z.object({
   terms_four: z.string().optional(),
   terms_five: z.string().optional(),
   terms_six: z.string().optional(),
-  is_checked_terms: z.boolean(),
-  is_checked_terms_two: z.boolean(),
-  is_checked_terms_three: z.boolean(),
-  is_checked_terms_four: z.boolean(),
-  is_checked_terms_five: z.boolean(),
-  is_checked_terms_six: z.boolean(),
+  is_checked_terms: z.boolean().optional(),
+  is_checked_terms_two: z.boolean().optional(),
+  is_checked_terms_three: z.boolean().optional(),
+  is_checked_terms_four: z.boolean().optional(),
+  is_checked_terms_five: z.boolean().optional(),
+  is_checked_terms_six: z.boolean().optional(),
   bills: billSchema,
 });
 
@@ -153,8 +153,11 @@ export function CreateOSDialog() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
+
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
+
+    console.log(filteredData)
 
     try {
       setIsSubmitting(true);
