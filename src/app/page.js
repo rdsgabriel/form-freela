@@ -38,12 +38,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true); // Estado de loading
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
     const fetchOrders = async () => {
-      try {
-        const response = await fetch('https://os.estoquefacil.net/api/order-services');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        try {
+            const response = await fetch(`http://localhost:8001/api/order-services/${token}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
         
         const data = await response.json();
         const validData = data.map(order => {
