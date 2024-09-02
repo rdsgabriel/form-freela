@@ -42,7 +42,7 @@ export default function Home() {
     const token = urlParams.get('token');
     const fetchOrders = async () => {
         try {
-            const response = await fetch(`https://os.estoquefacil.net/api/order-services/${token}`);
+            const response = await fetch(`https://os.estoquefacil.net/api/order-services/${toen}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
