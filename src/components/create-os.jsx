@@ -16,20 +16,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useRef  } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
 
-
 const billSchema = z.array(
-  z.object(
-    {
-      description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
-      amount: z.number().positive('Por favor, informe um valor válido'),
-      value: z.number().positive('Por favor, informe um valor válido')
-    }
-  )
-).min(1, 'Você deve incluir pelo menos um item.')
-
+  z.object({
+    description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
+    amount: z.number().positive('Por favor, informe um valor válido'),
+    value: z.number().positive('Por favor, informe um valor válido'),
+  })
+).min(1, 'Você deve incluir pelo menos um item.');
 
 const isClient = typeof window !== 'undefined' && typeof FileList !== 'undefined';
-// Schema de validação usando Zod
+
 const createOSSchema = z.object({
   checklist: z.object({
     device_turns_on: z.string().nonempty("Campo obrigatório"),
@@ -78,54 +74,25 @@ const createOSSchema = z.object({
   terms_four: z.string().optional(),
   terms_five: z.string().optional(),
   terms_six: z.string().optional(),
+  is_checked_terms: z.boolean(),
+  is_checked_terms_two: z.boolean(),
+  is_checked_terms_three: z.boolean(),
+  is_checked_terms_four: z.boolean(),
+  is_checked_terms_five: z.boolean(),
+  is_checked_terms_six: z.boolean(),
   bills: billSchema,
-})
-
+});
 
 export function CreateOSDialog() {
   const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
 
- // Função para formatar a data no formato DD/MM/YYYY
- const formatDate = (date) => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
+  const { fields, append, remove } = useFieldArray({
+    name: 'bills',
+    control,
+  });
 
-// Configura o valor inicial do campo de data no formato DD/MM/YYYY
-useEffect(() => {
-  const today = new Date();
-  const formattedDate = formatDate(today);
-  setValue('date', formattedDate); // Define o valor inicial do campo
-}, [setValue]);
-
-  const {fields, append, remove} = useFieldArray(
-    {
-      name: 'bills',
-      control,
-    }
-  )
-
-  const generateOrderNumber = () => {
-    const orderNumber = Math.floor(Math.random() * 1000000); // Gera um número aleatório
-    return orderNumber.toString().padStart(6, '0'); // Garante que o número tenha 6 dígitos
-  };
-
-  const orderNumber = generateOrderNumber();
-
-
-  // Obtenha os valores do campo 'bills'
-  const bills = watch('bills') || []; // Garantir que seja um array
-
-  // Calcular o valor total
-  const total_value = Array.isArray(bills)
-    ? bills.reduce((total, bill) => total + (bill.value || 0), 0)
-    : 0;
-
-  // Estado dos checkboxes
   const [isCheckedTerms, setIsCheckedTerms] = useState(false);
   const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(false);
   const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(false);
@@ -133,33 +100,63 @@ useEffect(() => {
   const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
   const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
 
-  // Funções para atualizar o estado dos checkboxes
-  const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
-  const handleCheckboxChangeTermsTwo = (e) => setIsCheckedTermsTwo(e);
-  const handleCheckboxChangeTermsThree = (e) => setIsCheckedTermsThree(e);
-  const handleCheckboxChangeTermsFour = (e) => setIsCheckedTermsFour(e);
-  const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e);
-  const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e);
+  useEffect(() => {
+    setValue('is_checked_terms', isCheckedTerms);
+    setValue('is_checked_terms_two', isCheckedTermsTwo);
+    setValue('is_checked_terms_three', isCheckedTermsThree);
+    setValue('is_checked_terms_four', isCheckedTermsFour);
+    setValue('is_checked_terms_five', isCheckedTermsFive);
+    setValue('is_checked_terms_six', isCheckedTermsSix);
+  }, [
+    isCheckedTerms,
+    isCheckedTermsTwo,
+    isCheckedTermsThree,
+    isCheckedTermsFour,
+    isCheckedTermsFive,
+    isCheckedTermsSix,
+    setValue,
+  ]);
+
+  const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e.target.checked);
+  const handleCheckboxChangeTermsTwo = (e) => setIsCheckedTermsTwo(e.target.checked);
+  const handleCheckboxChangeTermsThree = (e) => setIsCheckedTermsThree(e.target.checked);
+  const handleCheckboxChangeTermsFour = (e) => setIsCheckedTermsFour(e.target.checked);
+  const handleCheckboxChangeTermsFive = (e) => setIsCheckedTermsFive(e.target.checked);
+  const handleCheckboxChangeTermsSix = (e) => setIsCheckedTermsSix(e.target.checked);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  useEffect(() => {
+    const today = new Date();
+    const formattedDate = formatDate(today);
+    setValue('date', formattedDate);
+  }, [setValue]);
+
+  const generateOrderNumber = () => {
+    const orderNumber = Math.floor(Math.random() * 1000000);
+    return orderNumber.toString().padStart(6, '0');
+  };
+
+  const orderNumber = generateOrderNumber();
+
+  const bills = watch('bills') || [];
+  const total_value = bills.reduce((total, bill) => total + (bill.value || 0), 0);
 
   const url = '/api/order-services/create';
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-    // Remover os campos dos checkboxes não marcados
-    if (!isCheckedTerms) delete filteredData.terms;
-    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
-    if (!isCheckedTermsThree) delete filteredData.termsThree;
-    if (!isCheckedTermsFour) delete filteredData.termsFour;
-    if (!isCheckedTermsFive) delete filteredData.termsFive;
-    if (!isCheckedTermsSix) delete filteredData.termsSix;
-
     try {
-      setIsSubmitting(true); // Define o estado de envio como verdadeiro
-      if (submitButtonRef.current) submitButtonRef.current.disabled = true; // Desativa o botão
+      setIsSubmitting(true);
+      if (submitButtonRef.current) submitButtonRef.current.disabled = true;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -177,16 +174,15 @@ useEffect(() => {
       }
 
       const result = await response.json();
-
       window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
-      // Reativa o botão em caso de erro
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;
     } finally {
-      setIsSubmitting(false); // Define o estado de envio como falso após o processamento
+      setIsSubmitting(false);
     }
   };
+
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">

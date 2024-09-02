@@ -74,6 +74,12 @@ const createOSSchema = z.object({
   terms_four: z.string().optional(),
   terms_five: z.string().optional(),
   terms_six: z.string().optional(),
+  is_checked_terms: z.boolean(),
+  is_checked_terms_two: z.boolean(),
+  is_checked_terms_three: z.boolean(),
+  is_checked_terms_four: z.boolean(),
+  is_checked_terms_five: z.boolean(),
+  is_checked_terms_six: z.boolean(),
   bills: billSchema,
 });
 
@@ -88,6 +94,17 @@ export function UpdateOSDialog({ order }) {
   });
 
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
+
+
+  useEffect((order) => {
+    // Define os valores iniciais dos checkboxes apenas uma vez
+    setIsCheckedTerms(order.is_checked_terms);
+    setIsCheckedTermsTwo(order.is_checked_terms_two);
+    setIsCheckedTermsThree(order.is_checked_terms_three);
+    setIsCheckedTermsFour(order.is_checked_terms_four);
+    setIsCheckedTermsFive(order.is_checked_terms_five);
+    setIsCheckedTermsSix(order._checked_terms_six);
+  }, []);
 
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
@@ -121,6 +138,7 @@ export function UpdateOSDialog({ order }) {
       'client_zipcode', 'client_address', 'client_number', 'client_state',
       'client_city', 'device_brand', 'device_model', 'device_password',
       'device_serial', 'device_imei', 'device_accessories', 'device_additional_info',
+      'terms', 'terms_two', 'terms_three', 'terms_four', 'terms_five', 'terms_six'
     ];
 
     fields.forEach(field => {
