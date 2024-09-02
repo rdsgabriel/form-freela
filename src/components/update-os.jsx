@@ -139,7 +139,7 @@ export function UpdateOSDialog({ order }) {
       setValue('terms_three', order.terms_three || 'Se o seu dispositivo entrou em contato com água ou qualquer tipo de líquido e umidade, é possível que a abertura do mesmo danifique a placa, tornando-a impossível de reparar e inutilizando a placa.');
       setValue('terms_four', order.terms_four || 'A garantia não cobre mau uso, dispositivos molhados, quedas, telas rachadas ou abertura por pessoas não autorizadas.');
       setValue('terms_five', order.terms_five || 'Em serviços de reparo e recuperação na placa-mãe, há um alto risco de queimar a placa e tornar o dispositivo inutilizável. Nesses casos, não nos responsabilizamos por quaisquer danos, deixando o cliente ciente do risco de perda do equipamento.');
-      setValue('terms_six', order.terms_six || 'teste');
+      setValue('terms_six', order.terms_six || 'A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.');
 
 
     // Define os campos restantes
@@ -841,12 +841,13 @@ export function UpdateOSDialog({ order }) {
         </Button>
       )}
               {Object.keys(errors).length > 0 && (
-                <div className="text-red-500">
-                  {Object.keys(errors).map(key => (
-                    <p key={key}>{errors[key]?.message}</p>
-            ))}
+  <div className="text-red-500">
+    {Object.keys(errors).map((key) => (
+      <p key={key}>{errors[key]?.message}</p>
+    ))}
   </div>
 )}
+
           <DialogClose asChild className="ml-2">
             <Button variant='outline' >Cancelar</Button>
             </DialogClose>
