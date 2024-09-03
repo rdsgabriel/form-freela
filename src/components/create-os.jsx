@@ -159,10 +159,10 @@ export function CreateOSDialog() {
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-    console.log('debugando:',filteredData)
+    
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    console.log('token:', token)
+    
 
     try {
       setIsSubmitting(true);
@@ -190,7 +190,6 @@ export function CreateOSDialog() {
       window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
-      console.log('url:', url)
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;
     } finally {
       setIsSubmitting(false);

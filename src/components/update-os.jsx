@@ -96,8 +96,6 @@ export function UpdateOSDialog({ order }) {
   });
 
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
-
-  console.log(order)
   
 
   useEffect(() => {
@@ -198,14 +196,10 @@ export function UpdateOSDialog({ order }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
-  console.log('Errors:', errors);
-
 
   const idUser = order.id
 
   const handleUpdateOS = async (data) => {
-    console.log('Dados recebidos do formulário:', data);
-    console.log('ID recebido do order:', idUser);
 
     // Combine os dados do formulário com o valor total
     const filteredData = {
@@ -228,7 +222,6 @@ export function UpdateOSDialog({ order }) {
     if (!isCheckedTermsFive) delete filteredData.termsFive;
     if (!isCheckedTermsSix) delete filteredData.termsSix;
 
-    console.log('Dados filtrados:', filteredData)
   
     try {
       setIsSubmitting(true);

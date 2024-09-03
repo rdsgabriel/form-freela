@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
-import { useEffect } from 'react';
-import debounce from 'lodash.debounce'; // Importe a função debounce
+import { useEffect, useCallback } from 'react';
+import { debounce } from 'lodash'; // Supondo que você está usando lodash para debounce
 
 // Ajuste o esquema de validação para usar 'number' e 'client_name'
 const OSFiltersSchema = z.object({
@@ -22,14 +22,19 @@ export function OSFilters({ onFilter }) {
   // Observar mudanças nos campos
   const filters = watch();
 
-  // Crie uma função de debounce para a atualização dos filtros
-  const debouncedOnFilter = debounce((filters) => {
-    onFilter(filters);
-  }, 300); // Ajuste o tempo de debounce conforme necessário
+  // Função de filtro com debounce
+  const debouncedOnFilter = useCallback(
+    debounce((filters) => {
+      onFilter(filters);
+    }, 300), // Ajuste o tempo de debounce conforme necessário
+    [onFilter]
+  );
 
   useEffect(() => {
-    debouncedOnFilter(filters);
-  }, [filters]);
+    if (filters.number !== undefined || filters.client_name !== undefined) {
+      debouncedOnFilter(filters);
+    }
+  }, [filters, debouncedOnFilter]);
 
   const handleClear = () => {
     reset({ number: "", client_name: "" });
