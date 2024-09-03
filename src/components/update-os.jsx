@@ -195,17 +195,16 @@ export function UpdateOSDialog({ order }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
-  console.log(isSubmitting)
 
   console.log('Errors:', errors);
 
 
-  
+  const idUser = order.id
 
-  const handleUpdateOS = async (data, order) => {
+  const handleUpdateOS = async (data) => {
     console.log('Dados recebidos do formulário:', data);
     console.log('ID recebido do formulário:', data.id);
-    console.log('ID recebido do order:', order.id);
+    console.log('ID recebido do order:', idUser);
 
     // Combine os dados do formulário com o valor total
     const filteredData = {
