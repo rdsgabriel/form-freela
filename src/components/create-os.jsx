@@ -246,7 +246,7 @@ export function CreateOSDialog() {
               </div>
             </div>
 
-            <div className='border border-1 m-4 mt-2'>
+            <div className='ml-4  m-4 mt-2'>
             {imageUrl && <img src={imageUrl} alt="Logo" />}
             </div>
 
