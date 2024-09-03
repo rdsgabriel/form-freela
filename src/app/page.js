@@ -122,11 +122,7 @@ export default function Home() {
 
   const handleStatusChange = useCallback((id, newStatus) => {
     // Atualizar o estado imediatamente
-    const updatedOrders = orders.map(order =>
-      order.id === id ? { ...order, status: newStatus } : order
-    );
-    setOrders(updatedOrders);
-    setFilteredOrders(filterOrders(updatedOrders));
+   
   
     // Em seguida, enviar a requisição para o servidor
     const updateStatusOnServer = async () => {
@@ -143,6 +139,14 @@ export default function Home() {
         if (!response.ok) {
           throw new Error('Failed to update status');
         }
+
+        const updatedOrders = orders.map(order =>
+          order.id === id ? { ...order, status: newStatus } : order
+        );
+        setOrders(updatedOrders);
+        setFilteredOrders(filterOrders(updatedOrders));
+
+
       } catch (error) {
         console.error("Erro ao atualizar o status:", error);
       }
