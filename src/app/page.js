@@ -124,7 +124,9 @@ export default function Home() {
 
     fetchOrders();
 
-    const fetchJsonData = async () => {
+    let globalImageUrl = '';
+
+    const fetchImageUrl = async () => {
       try {
           const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
           if (!response.ok) {
@@ -132,23 +134,18 @@ export default function Home() {
           }
           const jsonData = await response.json(); // Converte a resposta para JSON
   
-          // Exibe o conteúdo do JSON no console
-          console.log('Dados JSON recebidos:', jsonData);
+          globalImageUrl = jsonData.imageUrl; // Armazena a URL da imagem na variável global
   
-          return jsonData;
+          console.log('URL da imagem salva na variável global:', globalImageUrl);
+  
+          return globalImageUrl;
       } catch (error) {
-          console.error('Erro ao buscar os dados:', error);
+          console.error('Erro ao buscar a imagem:', error);
           return null; // Retorna null em caso de erro
       }
   };
   
-  // Exemplo de uso:
-  fetchJsonData().then(jsonData => {
-      if (jsonData) {
-          // Faça algo com os dados JSON aqui, se necessário
-      }
-  });
-
+  fetchImageUrl();
   }, []);
 
   const handleStatusChange = useCallback((id, newStatus) => {
@@ -285,7 +282,7 @@ export default function Home() {
                 Criar OS
               </Button>
             </DialogTrigger>
-            <CreateOSDialog />
+            <CreateOSDialog imageUrl={imageUrl} />
           </Dialog>
 
           <OSFilters onFilter={handleFilter} />
@@ -402,7 +399,7 @@ export default function Home() {
                                     
                     {isDialogOpen && (
         <Dialog open onOpenChange={handleCloseDialog}>
-          <UpdateOSDialog order={order} onClose={handleCloseDialog} />
+          <UpdateOSDialog  imageUrl={imageUrl}order={order} onClose={handleCloseDialog} />
         </Dialog>
       )}
                     </TableCell>

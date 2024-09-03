@@ -85,10 +85,12 @@ const createOSSchema = z.object({
   bills: billSchema,
 });
 
-export function UpdateOSDialog({ order }) {
+export function UpdateOSDialog({ order, imageUrl }) {
   const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
+
+  const imgUrl = imageUrl
 
   const { fields, append, remove } = useFieldArray({
     name: 'bills',
@@ -279,7 +281,7 @@ export function UpdateOSDialog({ order }) {
 
             <div className='border border-1 m-4 mt-2'>
               <Image
-              src={darkLogo}
+              src={imgUrl}
               alt='logo'
               className='w-full h-full'
               />
