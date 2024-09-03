@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
-import { useEffect, useCallback } from 'react';
-import { debounce } from 'lodash'; // Supondo que você está usando lodash para debounce
+import { useEffect } from 'react';
+import debounce from 'lodash.debounce'; // Importe a função debounce
 
 // Ajuste o esquema de validação para usar 'number' e 'client_name'
 const OSFiltersSchema = z.object({
