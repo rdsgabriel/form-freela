@@ -3,10 +3,3 @@
   to = "https://os.estoquefacil.net/api/order-services/update/:splat"
   status = 200
   force = true
-  
-[[headers]]
-for = "/api/order-services/update/*"
-[headers.values]
-Access-Control-Allow-Origin = "https://ordem.estoquefacil.net"
-Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE, PATCH"
-Access-Control-Allow-Headers = "Content-Type, Authorization"
