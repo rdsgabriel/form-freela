@@ -253,9 +253,10 @@ export function UpdateOSDialog({ order }) {
 
 
   const [imageUrl, setImageUrl] = useState('');
+
   useEffect(() => {
     const fetchImageUrl = async () => {
-      
+
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
 
@@ -273,6 +274,8 @@ export function UpdateOSDialog({ order }) {
 
     fetchImageUrl();
 }, [])
+
+  console.log(imageUrl)
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
