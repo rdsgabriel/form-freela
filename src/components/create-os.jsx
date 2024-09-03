@@ -85,7 +85,7 @@ const createOSSchema = z.object({
   bills: billSchema,
 });
 
-export function CreateOSDialog(imageUrl) {
+export function CreateOSDialog() {
   const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });

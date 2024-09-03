@@ -85,12 +85,10 @@ const createOSSchema = z.object({
   bills: billSchema,
 });
 
-export function UpdateOSDialog({ order, imageUrl }) {
+export function UpdateOSDialog({ order }) {
   const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
-
-  const imgUrl = imageUrl
 
   const { fields, append, remove } = useFieldArray({
     name: 'bills',
@@ -253,6 +251,25 @@ export function UpdateOSDialog({ order, imageUrl }) {
     }
   };
 
+
+  const [imageUrl, setImageUrl] = useState('');
+  useEffect(() => {
+    const fetchImageUrl = async () => {
+        try {
+            const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const jsonData = await response.json();
+            setImageUrl(jsonData.imageUrl); // Atualiza o estado com a URL da imagem
+        } catch (error) {
+            console.error('Erro ao buscar a imagem:', error);
+        }
+    };
+
+    fetchImageUrl();
+}, [])
+
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
       <DialogHeader>
@@ -281,7 +298,7 @@ export function UpdateOSDialog({ order, imageUrl }) {
 
             <div className='border border-1 m-4 mt-2'>
               <Image
-              src={imgUrl}
+              src={imageUrl}
               alt='logo'
               className='w-full h-full'
               />

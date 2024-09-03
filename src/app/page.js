@@ -124,28 +124,7 @@ export default function Home() {
 
     fetchOrders();
 
-    let globalImageUrl = '';
 
-    const fetchImageUrl = async () => {
-      try {
-          const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          const jsonData = await response.json(); // Converte a resposta para JSON
-  
-          globalImageUrl = jsonData.imageUrl; // Armazena a URL da imagem na variável global
-  
-          console.log('URL da imagem salva na variável global:', globalImageUrl);
-  
-          return globalImageUrl;
-      } catch (error) {
-          console.error('Erro ao buscar a imagem:', error);
-          return null; // Retorna null em caso de erro
-      }
-  };
-  
-  fetchImageUrl();
   }, []);
 
   const handleStatusChange = useCallback((id, newStatus) => {
@@ -282,7 +261,7 @@ export default function Home() {
                 Criar OS
               </Button>
             </DialogTrigger>
-            <CreateOSDialog imageUrl={imageUrl} />
+            <CreateOSDialog />
           </Dialog>
 
           <OSFilters onFilter={handleFilter} />
@@ -399,7 +378,7 @@ export default function Home() {
                                     
                     {isDialogOpen && (
         <Dialog open onOpenChange={handleCloseDialog}>
-          <UpdateOSDialog  imageUrl={imageUrl}order={order} onClose={handleCloseDialog} />
+          <UpdateOSDialog order={order} onClose={handleCloseDialog} />
         </Dialog>
       )}
                     </TableCell>
