@@ -254,9 +254,7 @@ export function UpdateOSDialog({ order }) {
 
   const [imageUrl, setImageUrl] = useState('');
 
-  
     const fetchImageUrl = async () => {
-
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
 
@@ -266,16 +264,18 @@ export function UpdateOSDialog({ order }) {
                 throw new Error('Network response was not ok');
             }
             const jsonData = await response.json();
-            console.log(jsonData)
-            setImageUrl(jsonData.imageUrl); // Atualiza o estado com a URL da imagem
-            console.log('url:', imageUrl)
+            console.log(jsonData);
+            setImageUrl(jsonData.logo_url.imageUrl); // Atualiza o estado com a URL da imagem
+            console.log('url:', jsonData.logo_url.imageUrl);
 
         } catch (error) {
             console.error('Erro ao buscar a imagem:', error);
         }
     };
 
-    fetchImageUrl();
+    useEffect(() => {
+        fetchImageUrl();
+    }, []);
 
 
   return (
