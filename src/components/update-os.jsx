@@ -202,9 +202,11 @@ export function UpdateOSDialog({ order }) {
 
   
 
-  const handleUpdateOS = async (data) => {
+  const handleUpdateOS = async (data, order) => {
     console.log('Dados recebidos do formulário:', data);
     console.log('ID recebido do formulário:', data.id);
+    console.log('ID recebido do order:', order.id);
+
     // Combine os dados do formulário com o valor total
     const filteredData = {
       ...data,
