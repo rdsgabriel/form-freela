@@ -266,16 +266,18 @@ export function UpdateOSDialog({ order }) {
                 throw new Error('Network response was not ok');
             }
             const jsonData = await response.json();
+            console.log(jsonData)
             setImageUrl(jsonData.imageUrl); // Atualiza o estado com a URL da imagem
+            console.log('url:', imageUrl)
+
         } catch (error) {
             console.error('Erro ao buscar a imagem:', error);
         }
     };
 
     fetchImageUrl();
-}, [])
+}, [imageUrl])
 
-  console.log(imageUrl)
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
