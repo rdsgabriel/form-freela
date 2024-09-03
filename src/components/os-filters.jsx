@@ -31,17 +31,11 @@ export function OSFilters({ onFilter }) {
     debouncedOnFilter(filters);
   }, [filters]);
 
-  const handleClear = () => {
-    reset({ number: "", client_name: "" });
-  };
 
   return (
     <form className="flex items-center gap-2">
       <Input placeholder="Busque por ID" {...register('number')} />
       <Input placeholder="Busque por cliente" {...register('client_name')} />
-      <Button type="button" onClick={handleClear} variant="link">
-        Limpar filtros
-      </Button>
       <Button type="button" variant="link">
         <Search className="w-4 h-4 mr-2 text-[#29aae1]" />
         Filtrar resultados
