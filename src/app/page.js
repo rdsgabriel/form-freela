@@ -36,7 +36,7 @@ export default function Home() {
   const [itemsPerPage] = useState(10); // Número de itens por página
   const [loading, setLoading] = useState(true); // Estado de loading
 
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState('');
 
 
   useEffect(() => {
