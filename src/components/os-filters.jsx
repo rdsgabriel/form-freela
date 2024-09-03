@@ -5,9 +5,9 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
 import { useEffect } from 'react';
-import debounce from 'lodash.debounce'; // Importe a função debounce
+import debounce from 'lodash.debounce';
 
-// Ajuste o esquema de validação para usar 'number' e 'client_name'
+
 const OSFiltersSchema = z.object({
   number: z.string().optional(),
   client_name: z.string().optional()
@@ -22,10 +22,10 @@ export function OSFilters({ onFilter }) {
   // Observar mudanças nos campos
   const filters = watch();
 
-  // Crie uma função de debounce para a atualização dos filtros
+  
   const debouncedOnFilter = debounce((filters) => {
     onFilter(filters);
-  }, 50); // Ajuste o tempo de debounce conforme necessário
+  }, 10); 
 
   useEffect(() => {
     debouncedOnFilter(filters);
