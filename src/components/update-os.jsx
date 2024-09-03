@@ -200,7 +200,7 @@ export function UpdateOSDialog({ order }) {
   console.log('Errors:', errors);
 
 
-  const url = `/api/order-services/update/${order.id}`;
+  
 
   const handleUpdateOS = async (data) => {
     console.log('Dados recebidos do formulário:', data); // Verifique os dados recebidos do formulário
@@ -231,8 +231,10 @@ export function UpdateOSDialog({ order }) {
     try {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
-  
-      const response = await fetch(url, {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/create/${token}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

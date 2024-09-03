@@ -149,7 +149,7 @@ export function CreateOSDialog() {
   const bills = watch('bills') || [];
   const total_value = bills.reduce((total, bill) => total + (bill.value || 0), 0);
 
-  const url = `https://os.estoquefacil.net/api/order-services/create/${token}`;
+ 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
@@ -158,12 +158,14 @@ export function CreateOSDialog() {
     const filteredData = { ...data, total_value };
 
     console.log('debugando:',filteredData)
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
 
     try {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
 
-      const response = await fetch(url, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/create/${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
