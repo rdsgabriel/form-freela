@@ -149,7 +149,7 @@ export function CreateOSDialog() {
   const bills = watch('bills') || [];
   const total_value = bills.reduce((total, bill) => total + (bill.value || 0), 0);
 
-  const url = '/api/order-services/create';
+  const url = `https://os.estoquefacil.net/api/order-services/create/${token}`;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
