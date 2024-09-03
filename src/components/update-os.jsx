@@ -202,9 +202,9 @@ export function UpdateOSDialog({ order }) {
 
   
 
-  const handleUpdateOS = async (data) => {
-    console.log('Dados recebidos do formulário:', data); // Verifique os dados recebidos do formulário
-  
+  const handleUpdateOS = async (data, id) => {
+    console.log('Dados recebidos do formulário:', data);
+    console.log('ID recebido do formulário:', id);
     // Combine os dados do formulário com o valor total
     const filteredData = {
       ...data,
@@ -231,10 +231,8 @@ export function UpdateOSDialog({ order }) {
     try {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
-      
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/create/${token}`, {
+
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
