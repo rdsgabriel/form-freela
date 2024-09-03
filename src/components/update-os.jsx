@@ -15,6 +15,8 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useRef } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
+import Image from 'next/image';
+import darkLogo from '../app/dark-logo.png'
 
 const billSchema = z.array(
   z.object({
@@ -281,7 +283,13 @@ export function UpdateOSDialog({ order }) {
               </div>
             </div>
 
-            
+            <div className='border border-1 m-4 mt-2'>
+              <Image
+              src={darkLogo}
+              alt='logo'
+              className='w-full h-full'
+              />
+            </div>
             
           </div>
 

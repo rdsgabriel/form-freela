@@ -145,7 +145,6 @@ export default function Home() {
         }
       } catch (error) {
         console.error("Erro ao atualizar o status:", error);
-        
       }
     };
   

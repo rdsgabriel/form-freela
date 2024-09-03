@@ -15,6 +15,8 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useRef  } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
+import Image from 'next/image';
+import darkLogo from '../app/dark-logo.png'
 
 const billSchema = z.array(
   z.object({
@@ -166,9 +168,8 @@ export function CreateOSDialog() {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
 
-      const url = `https://os.estoquefacil.net/api/order-services/create/${token}`
 
-      const response = await fetch(url, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/create/${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +178,6 @@ export function CreateOSDialog() {
         mode: 'cors',
       });
 
-      
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -211,7 +211,7 @@ export function CreateOSDialog() {
           <h2 className="text-lg font-semibold bg-[#29aae1] py-2 text-white pl-2">Informações Gerais</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-4">
-              <div className='space-y-2'>
+              <div className='space-y-2 mt-4'>
               <Label htmlFor="date">Data:</Label>
                 <Input id="date" {...register('date')} />
                 {errors.date && <p className="text-red-500 text-xs">{errors.date.message}</p>}
@@ -223,6 +223,13 @@ export function CreateOSDialog() {
               </div>
             </div>
 
+            <div className='border border-1 m-4 mt-2'>
+              <Image
+              src={darkLogo}
+              alt='logo'
+              className='w-full h-full'
+              />
+            </div>
 
           </div>
 
@@ -785,7 +792,7 @@ export function CreateOSDialog() {
         </div>
       ) : (
         <Button
-          className="bg-[#29aae1] hover:bg-cyan-500"
+          className="bg-[#29aae1] hover:bg-cyan-500 sm:mt-4 md:mt-0"
           type="submit"
           ref={submitButtonRef} // Referência para o botão
           disabled={isSubmitting} // Desativa o botão se isSubmitting for verdadeiro
