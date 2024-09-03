@@ -160,6 +160,7 @@ export function CreateOSDialog() {
     console.log('debugando:',filteredData)
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+    console.log('token:', token)
 
     try {
       setIsSubmitting(true);
