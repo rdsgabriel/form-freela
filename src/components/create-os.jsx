@@ -177,7 +177,7 @@ export function CreateOSDialog() {
         mode: 'cors',
       });
 
-      console.log('url:', url)
+      
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -190,6 +190,7 @@ export function CreateOSDialog() {
       window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
+      console.log('url:', url)
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;
     } finally {
       setIsSubmitting(false);
