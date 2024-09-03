@@ -124,27 +124,28 @@ export default function Home() {
 
     fetchOrders();
 
-    const fetchImageUrl = async () => {
+    const fetchJsonData = async () => {
       try {
           const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
           if (!response.ok) {
               throw new Error('Network response was not ok');
           }
-          const imageBlob = await response.blob(); // Converte a resposta em um blob
-          const imageURL = URL.createObjectURL(imageBlob); // Cria uma URL para o blob
+          const jsonData = await response.json(); // Converte a resposta para JSON
   
-          // Retorna ou usa a URL da imagem
-          return imageURL;
+          // Exibe o conteúdo do JSON no console
+          console.log('Dados JSON recebidos:', jsonData);
+  
+          return jsonData;
       } catch (error) {
-          console.error('Erro ao buscar a imagem:', error);
+          console.error('Erro ao buscar os dados:', error);
           return null; // Retorna null em caso de erro
       }
   };
   
   // Exemplo de uso:
-  fetchImageUrl().then(imageURL => {
-      if (imageURL) {
-          console.log('URL da imagem:', imageURL);
+  fetchJsonData().then(jsonData => {
+      if (jsonData) {
+          // Faça algo com os dados JSON aqui, se necessário
       }
   });
 
