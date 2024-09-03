@@ -264,10 +264,9 @@ export function UpdateOSDialog({ order }) {
                 throw new Error('Network response was not ok');
             }
             const jsonData = await response.json();
-            console.log(jsonData);
+           
             setImageUrl(jsonData.logo_url.imageUrl); // Atualiza o estado com a URL da imagem
-            console.log('url:', jsonData.logo_url.imageUrl);
-
+            
         } catch (error) {
             console.error('Erro ao buscar a imagem:', error);
         }
@@ -305,11 +304,7 @@ export function UpdateOSDialog({ order }) {
             </div>
 
             <div className='border border-1 m-4 mt-2'>
-              <Image
-              src={imageUrl}
-              alt='logo'
-              className='w-full h-full'
-              />
+            {imageUrl && <img src={imageUrl} alt="Logo" />}
             </div>
             
           </div>
