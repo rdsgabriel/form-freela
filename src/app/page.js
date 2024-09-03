@@ -224,7 +224,8 @@ export default function Home() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
 
   // Função para abrir o diálogo de exclusão
-  const openDeleteDialog = () => {
+  const openDeleteDialog = (order) => {
+    setItemToDelete(order.number)
     setIsDialogDelete(true);
   };
 
@@ -351,7 +352,7 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={openDeleteDialog}
+                            onClick={openDeleteDialog(order)}
                               
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
@@ -373,7 +374,7 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(order.number)}
+              <AlertDialogAction onClick={() => handleDelete(itemToDelete)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
