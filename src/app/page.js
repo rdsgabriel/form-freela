@@ -345,13 +345,13 @@ export default function Home() {
                         <DropdownMenuContent className="w-48 p-2 bg-white shadow-lg rounded-lg">
                           <DropdownMenuItem
                             className="flex items-center p-2 text-[#29aae1] hover:bg-blue-50 rounded-lg"
-                            onClick={() => handleDelete(order.number)}
+                            onClick={(handleEditClick)}
                           >
                             <Pencil className="mr-2 w-4 h-4" />
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={handleDelete}
+                            onClick={() => handleDelete(order.number)}
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
                             <Trash className="mr-2 w-4 h-4" />
