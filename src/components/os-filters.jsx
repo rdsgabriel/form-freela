@@ -25,7 +25,7 @@ export function OSFilters({ onFilter }) {
   // Crie uma função de debounce para a atualização dos filtros
   const debouncedOnFilter = debounce((filters) => {
     onFilter(filters);
-  }, 100); // Ajuste o tempo de debounce conforme necessário
+  }, 50); // Ajuste o tempo de debounce conforme necessário
 
   useEffect(() => {
     debouncedOnFilter(filters);
