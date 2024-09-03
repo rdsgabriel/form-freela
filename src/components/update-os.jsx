@@ -196,8 +196,6 @@ export function UpdateOSDialog({ order }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
-  console.log('Errors:', errors);
-
 
   const idUser = order.id
 
