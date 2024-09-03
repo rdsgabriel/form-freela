@@ -377,7 +377,12 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={handleDelete}
+            <AlertDialogAction 
+  onClick={() => {
+    if (itemToDelete) {
+      handleDelete(); // Execute a exclusão se itemToDelete não estiver vazio
+    }
+  }}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
