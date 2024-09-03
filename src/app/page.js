@@ -101,6 +101,7 @@ export default function Home() {
           charger: '',
           backup: '',
         },
+        status: order.status || 'Pendente',
         logo: order.logo || null,
         date: order.date || '',
         pdf_url: order.pdf_url || '',
@@ -144,12 +145,7 @@ export default function Home() {
         }
       } catch (error) {
         console.error("Erro ao atualizar o status:", error);
-        // Caso haja um erro, você pode optar por reverter a mudança visual
-        const revertedOrders = orders.map(order =>
-          order.id === id ? { ...order, status: orders.find(o => o.id === id).status } : order
-        );
-        setOrders(revertedOrders);
-        setFilteredOrders(filterOrders(revertedOrders));
+        
       }
     };
   
