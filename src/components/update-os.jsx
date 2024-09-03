@@ -303,7 +303,7 @@ export function UpdateOSDialog({ order }) {
               </div>
             </div>
 
-            <div className='m-4 ml-4 mt-2'>
+            <div className='mx-auto mt-2'>
             {imageUrl && <img src={imageUrl} alt="Logo" />}
             </div>
             
