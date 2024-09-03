@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 // Ajuste o esquema de validação para usar 'number' e 'client_name'
 const OSFiltersSchema = z.object({
@@ -21,13 +21,16 @@ export function OSFilters({ onFilter }) {
   // Observar mudanças nos campos
   const filters = watch();
 
-  useEffect(() => {
-    // Chama a função de filtro apenas quando `filters` muda
+  // Use useCallback para garantir que a função onFilter não seja recriada em cada renderização
+  const handleFilter = useCallback(() => {
     onFilter(filters);
   }, [filters, onFilter]);
 
+  useEffect(() => {
+    handleFilter();
+  }, [filters, handleFilter]);
+
   const handleClear = () => {
-    // Função para limpar os filtros
     reset({ number: "", client_name: "" });
   };
 
