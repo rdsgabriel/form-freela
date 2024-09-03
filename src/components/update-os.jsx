@@ -254,7 +254,7 @@ export function UpdateOSDialog({ order }) {
 
   const [imageUrl, setImageUrl] = useState('');
 
-  useEffect(() => {
+  
     const fetchImageUrl = async () => {
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -276,7 +276,6 @@ export function UpdateOSDialog({ order }) {
     };
 
     fetchImageUrl();
-}, [imageUrl])
 
 
   return (
