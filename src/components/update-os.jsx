@@ -128,12 +128,12 @@ export function UpdateOSDialog({ order }) {
     // Define os campos do checklist
     if (order.checklist) {
       Object.keys(order.checklist).forEach((key) => {
-        setValue(`checklist.${key}`, order.checklist[key]); 
+        setValue(`checklist.${key}`, order.checklist[key]); // Define um valor padrão vazio se não houver valor
       });
     }
 
-    
-    setValue('logo', order.logo || null);
+    // Define o campo logo
+    setValue('logo', order.logo || null); // Define null se logo não estiver presente
 
 
       setValue('terms', order.terms || 'A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.');
@@ -154,22 +154,23 @@ export function UpdateOSDialog({ order }) {
 
     fields.forEach(field => {
       if (order[field] !== undefined) {
-        setValue(field, order[field]); 
+        setValue(field, order[field]); // Define um valor padrão vazio se não houver valor
       }
     });
 
     // Define os campos de bills
     if (Array.isArray(order.bills)) {
       order.bills.forEach((bill, index) => {
-        setValue(`bills.${index}.value`, bill.value || 0);
+        setValue(`bills.${index}.value`, bill.value || 0); // Define um valor padrão 0 se não houver valor
         setValue(`bills.${index}.amount`, bill.amount || 0);
-        setValue(`bills.${index}.description`, bill.description || ''); 
+        setValue(`bills.${index}.description`, bill.description || ''); // Define uma descrição padrão vazia se não houver descrição
       });
     } else {
       console.error('order.bills não é um array:', order.bills);
     }}
 
-  const bills = watch('bills') || []; y
+  // Obtenha os valores do campo 'bills'
+  const bills = watch('bills') || []; // Garantir que seja um array
 
   // Calcular o valor total
   const total_value = Array.isArray(bills)
@@ -195,12 +196,15 @@ export function UpdateOSDialog({ order }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitButtonRef = useRef(null);
 
+  console.log('Errors:', errors);
+
 
   const idUser = order.id
 
   const handleUpdateOS = async (data) => {
-
     
+
+    // Combine os dados do formulário com o valor total
     const filteredData = {
       ...data,
       total_value,
