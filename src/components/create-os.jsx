@@ -166,7 +166,9 @@ export function CreateOSDialog() {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
 
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/create/${token}`, {
+      const url = `https://os.estoquefacil.net/api/order-services/create/${token}`
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,6 +176,8 @@ export function CreateOSDialog() {
         body: JSON.stringify(filteredData),
         mode: 'cors',
       });
+
+      console.log('url:', url)
 
       if (!response.ok) {
         const errorText = await response.text();
