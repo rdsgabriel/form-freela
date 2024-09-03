@@ -22,19 +22,14 @@ export function OSFilters({ onFilter }) {
   // Observar mudanças nos campos
   const filters = watch();
 
-  // Função de filtro com debounce
-  const debouncedOnFilter = useCallback(
-    debounce((filters) => {
-      onFilter(filters);
-    }, 300), // Ajuste o tempo de debounce conforme necessário
-    [onFilter]
-  );
+  // Crie uma função de debounce para a atualização dos filtros
+  const debouncedOnFilter = debounce((filters) => {
+    onFilter(filters);
+  }, 300); // Ajuste o tempo de debounce conforme necessário
 
   useEffect(() => {
-    if (filters.number !== undefined || filters.client_name !== undefined) {
-      debouncedOnFilter(filters);
-    }
-  }, [filters, debouncedOnFilter]);
+    debouncedOnFilter(filters);
+  }, [filters]);
 
   const handleClear = () => {
     reset({ number: "", client_name: "" });
