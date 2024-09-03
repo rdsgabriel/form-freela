@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
+import { useEffect } from 'react';
 
 // Ajuste o esquema de validação para usar 'number' e 'client_name'
 const OSFiltersSchema = z.object({
@@ -12,20 +13,23 @@ const OSFiltersSchema = z.object({
 });
 
 export function OSFilters({ onFilter }) {
-  const { register, handleSubmit } = useForm({
+  const { register, watch } = useForm({
     resolver: zodResolver(OSFiltersSchema),
     defaultValues: { number: "", client_name: "" }
   });
 
-  function handleFilterOS(data) {
-    console.log("Data from form:", data);
-    onFilter(data);
-  }
+  // Observar mudanças nos campos
+  const filters = watch();
+
+  useEffect(() => {
+    onFilter(filters);
+  }, [filters, onFilter]); // Chama o filtro sempre que houver mudanças
 
   return (
-    <form onSubmit={handleSubmit(handleFilterOS)} className="flex items-center gap-2">
+    <form className="flex items-center gap-2">
       <Input placeholder="Busque por ID" {...register('number')} />
       <Input placeholder="Busque por cliente" {...register('client_name')} />
+      {/* O botão pode ser removido se não quiser uma opção de submissão manual */}
       <Button type="submit" variant="link">
         <Search className="w-4 h-4 mr-2 text-[#29aae1]" />
         Filtrar resultados
