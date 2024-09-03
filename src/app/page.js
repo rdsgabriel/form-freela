@@ -345,7 +345,7 @@ export default function Home() {
                         <DropdownMenuContent className="w-48 p-2 bg-white shadow-lg rounded-lg">
                           <DropdownMenuItem
                             className="flex items-center p-2 text-[#29aae1] hover:bg-blue-50 rounded-lg"
-                            onClick={handleEditClick}
+                            onClick={() => handleDelete(order.number)}
                           >
                             <Pencil className="mr-2 w-4 h-4" />
                             Editar
