@@ -190,7 +190,6 @@ export default function Home() {
   };
 
   const handleDelete = async (number) => {
-    if (!itemToDelete) return;
     // Remover imediatamente a ordem de serviço da interface
     setOrders(prevOrders => prevOrders.filter(order => order.number !== number));
     setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.number !== number));
@@ -225,8 +224,7 @@ export default function Home() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
 
   // Função para abrir o diálogo de exclusão
-  const openDeleteDialog = (order) => {
-    setItemToDelete(order.number)
+  const openDeleteDialog = () => {
     setIsDialogDelete(true);
   };
 
@@ -353,7 +351,7 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={openDeleteDialog(order)}
+                            onClick={openDeleteDialog}
                               
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
@@ -375,7 +373,7 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(itemToDelete)}
+              <AlertDialogAction onClick={() => handleDelete(order.number)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
