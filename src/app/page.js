@@ -190,6 +190,7 @@ export default function Home() {
   };
 
   const handleDelete = async (number) => {
+    if (!itemToDelete) return;
     // Remover imediatamente a ordem de serviço da interface
     setOrders(prevOrders => prevOrders.filter(order => order.number !== number));
     setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.number !== number));
