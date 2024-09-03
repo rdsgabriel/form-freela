@@ -42,6 +42,9 @@ export default function Home() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+
+   
+
     const fetchOrders = async () => {
         try {
             const response = await fetch(`https://os.estoquefacil.net/api/order-services/${token}`);
@@ -120,6 +123,31 @@ export default function Home() {
     };
 
     fetchOrders();
+
+    const fetchImageUrl = async () => {
+      try {
+          const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const imageBlob = await response.blob(); // Converte a resposta em um blob
+          const imageURL = URL.createObjectURL(imageBlob); // Cria uma URL para o blob
+  
+          // Retorna ou usa a URL da imagem
+          return imageURL;
+      } catch (error) {
+          console.error('Erro ao buscar a imagem:', error);
+          return null; // Retorna null em caso de erro
+      }
+  };
+  
+  // Exemplo de uso:
+  fetchImageUrl().then(imageURL => {
+      if (imageURL) {
+          console.log('URL da imagem:', imageURL);
+      }
+  });
+
   }, []);
 
   const handleStatusChange = useCallback((id, newStatus) => {
