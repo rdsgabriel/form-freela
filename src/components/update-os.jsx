@@ -255,6 +255,10 @@ export function UpdateOSDialog({ order }) {
   const [imageUrl, setImageUrl] = useState('');
   useEffect(() => {
     const fetchImageUrl = async () => {
+      
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
         try {
             const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
             if (!response.ok) {
