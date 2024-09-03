@@ -203,7 +203,6 @@ export function UpdateOSDialog({ order }) {
 
   const handleUpdateOS = async (data) => {
     console.log('Dados recebidos do formulário:', data);
-    console.log('ID recebido do formulário:', data.id);
     console.log('ID recebido do order:', idUser);
 
     // Combine os dados do formulário com o valor total
@@ -233,7 +232,7 @@ export function UpdateOSDialog({ order }) {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
 
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${idUser}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
