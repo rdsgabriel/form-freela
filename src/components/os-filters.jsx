@@ -19,17 +19,6 @@ export function OSFilters({ onFilter }) {
     defaultValues: { number: "", client_name: "" }
   });
 
-  // Observar mudanças nos campos
-  const filters = watch();
-
-  
-  const debouncedOnFilter = debounce((filters) => {
-    onFilter(filters);
-  }, 10); 
-
-  useEffect(() => {
-    debouncedOnFilter(filters);
-  }, [filters]);
 
   const handleClear = () => {
     reset({ number: "", client_name: "" });
