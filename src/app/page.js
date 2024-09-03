@@ -9,7 +9,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
 import { Dialog, DialogTrigger,  } from "@/components/ui/dialog";
@@ -39,18 +38,6 @@ export default function Home() {
 
   const [itemToDelete, setItemToDelete] = useState(null);
 
-  const handleDeleteClick = (id) => {
-    setItemToDelete(id);
-  };
-
-  const confirmDelete = () => {
-    onDelete(itemToDelete);
-    setItemToDelete(null); // Reseta o estado após a exclusão
-  };
-
-  const cancelDelete = () => {
-    setItemToDelete(null); // Cancela a exclusão
-  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -202,13 +189,13 @@ export default function Home() {
     window.history.back();
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (number) => {
     // Remover imediatamente a ordem de serviço da interface
-    setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
-    setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.id !== id));
+    setOrders(prevOrders => prevOrders.filter(order => order.number !== number));
+    setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.number !== number));
   
     try {
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/del/${id}`, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/del/${number}`, {
         method: 'DELETE'
       });
   
@@ -386,7 +373,7 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(order.id)}
+              <AlertDialogAction onClick={() => handleDelete(order.number)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
