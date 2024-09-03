@@ -271,7 +271,7 @@ export function UpdateOSDialog({ order }) {
           <h2 className="text-lg font-semibold bg-[#29aae1] py-2 text-white pl-2">Informações Gerais</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-4">
-              <div className='space-y-2'>
+              <div className='space-y-2 mt-4'>
               <Label htmlFor="date">Data:</Label>
                 <Input id="date" {...register('date')} defaultValue={formatDate(order.date)} />
                 {errors.date && <p className="text-red-500 text-xs">{errors.date.message}</p>}
