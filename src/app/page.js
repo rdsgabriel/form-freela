@@ -39,6 +39,18 @@ export default function Home() {
 
   const [itemToDelete, setItemToDelete] = useState(null);
 
+  const handleDeleteClick = (id) => {
+    setItemToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    onDelete(itemToDelete);
+    setItemToDelete(null); // Reseta o estado após a exclusão
+  };
+
+  const cancelDelete = () => {
+    setItemToDelete(null); // Cancela a exclusão
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -204,9 +216,7 @@ export default function Home() {
         throw new Error('Erro ao deletar a ordem de serviço');
       }
       
-      setIsDialogDelete(false);
-      setItemToDelete(null);
-
+    
     } catch (error) {
       console.error('Erro ao excluir a ordem de serviço:', error);
       
@@ -227,8 +237,7 @@ export default function Home() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
 
   // Função para abrir o diálogo de exclusão
-  const openDeleteDialog = (id) => {
-    setItemToDelete(id)
+  const openDeleteDialog = () => {
     setIsDialogDelete(true);
   };
 
@@ -355,7 +364,7 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={openDeleteDialog(order.id)}
+                            onClick={openDeleteDialog}
                               
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
@@ -377,7 +386,7 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(itemToDelete)}
+              <AlertDialogAction onClick={() => handleDelete(order.id)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
