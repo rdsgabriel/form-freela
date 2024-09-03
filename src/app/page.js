@@ -37,6 +37,9 @@ export default function Home() {
   const [itemsPerPage] = useState(10); // Número de itens por página
   const [loading, setLoading] = useState(true); // Estado de loading
 
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -200,8 +203,10 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Erro ao deletar a ordem de serviço');
       }
-  
-    
+      
+      setIsDialogDelete(false);
+      setItemToDelete(null);
+
     } catch (error) {
       console.error('Erro ao excluir a ordem de serviço:', error);
       
@@ -222,7 +227,8 @@ export default function Home() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
 
   // Função para abrir o diálogo de exclusão
-  const openDeleteDialog = () => {
+  const openDeleteDialog = (id) => {
+    setItemToDelete(id)
     setIsDialogDelete(true);
   };
 
@@ -349,7 +355,7 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={openDeleteDialog}
+                            onClick={openDeleteDialog(order.id)}
                               
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
@@ -371,11 +377,11 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(order.id)}
+              <AlertDialogAction onClick={() => handleDelete(itemToDelete)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
-<AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
