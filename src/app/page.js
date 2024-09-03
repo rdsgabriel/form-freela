@@ -218,6 +218,12 @@ export default function Home() {
   };
 
   const handleDelete = async (number) => {
+
+    const userConfirmed = window.confirm("Você tem certeza que deseja excluir esta ordem de serviço?");
+    
+    if (!userConfirmed) {
+        return; // Se o usuário cancelar, a função termina aqui e nada é excluído
+    }
     // Remover imediatamente a ordem de serviço da interface
     setOrders(prevOrders => prevOrders.filter(order => order.number !== number));
     setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.number !== number));
