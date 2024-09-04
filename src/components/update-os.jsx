@@ -192,7 +192,7 @@ export function UpdateOSDialog({ order }) {
     }
   }, [order]);
 
-  console.log(isCheckedTerms, isCheckedTermsTwo,isCheckedTermsThree, isCheckedTermsFour, isCheckedTermsFive, isCheckedTermsSix)
+  console.log(isCheckedTerms, isCheckedTermsTwo,isCheckedTermsThree, order.is_checked_terms, order.is_checked_terms_two, order.is_checked_terms_three)
 
   // Funções para atualizar o estado dos checkboxes
   const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
