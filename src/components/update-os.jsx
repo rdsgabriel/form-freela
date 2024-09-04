@@ -190,9 +190,8 @@ export function UpdateOSDialog({ order }) {
       setIsCheckedTermsFive(order.is_checked_terms_five);
       setIsCheckedTermsSix(order.is_checked_terms_six);
     }
-  }, [order]);
+  }, []);
 
-  console.log(isCheckedTerms, isCheckedTermsTwo,isCheckedTermsThree, order.is_checked_terms, order.is_checked_terms_two, order.is_checked_terms_three)
 
   // Funções para atualizar o estado dos checkboxes
   const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
@@ -225,12 +224,12 @@ export function UpdateOSDialog({ order }) {
 
   
     // Remove campos não marcados
-    if (!order.is_checked_terms) delete filteredData.terms;
-    if (!order.is_checked_terms_two) delete filteredData.termsTwo;
-    if (!order.is_checked_terms_three) delete filteredData.termsThree;
-    if (!order.is_checked_terms_four) delete filteredData.termsFour;
-    if (!order.is_checked_terms_five) delete filteredData.termsFive;
-    if (!order.is_checked_terms_six) delete filteredData.termsSix;
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
+    if (!isCheckedTermsThree) delete filteredData.termsThree;
+    if (!isCheckedTermsFour) delete filteredData.termsFour;
+    if (!isCheckedTermsFive) delete filteredData.termsFive;
+    if (!isCheckedTermsSix) delete filteredData.termsSix;
 
   
     try {
