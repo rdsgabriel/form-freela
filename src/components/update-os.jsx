@@ -97,10 +97,8 @@ export function UpdateOSDialog({ order }) {
 
   const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
   
-  console.log(order)
 
   useEffect(() => {
-    
     if(order){
       setIsCheckedTerms(order.is_checked_terms);
       setIsCheckedTermsTwo(order.is_checked_terms_two);
