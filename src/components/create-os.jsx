@@ -161,7 +161,7 @@ export function CreateOSDialog() {
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-    if (!isCheckedTerms || !filteredData.terms) delete filteredData.terms;
+  if (!isCheckedTerms || !filteredData.terms) delete filteredData.terms;
   if (!isCheckedTermsTwo || !filteredData.termsTwo) delete filteredData.termsTwo;
   if (!isCheckedTermsThree || !filteredData.termsThree) delete filteredData.termsThree;
   if (!isCheckedTermsFour || !filteredData.termsFour) delete filteredData.termsFour;

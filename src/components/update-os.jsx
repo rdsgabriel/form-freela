@@ -174,12 +174,12 @@ export function UpdateOSDialog({ order }) {
     : 0;
 
   // Estado dos checkboxes
-  const [isCheckedTerms, setIsCheckedTerms] = useState(false);
-  const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(false);
-  const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(false);
-  const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(false);
-  const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
-  const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
+  const [isCheckedTerms, setIsCheckedTerms] = useState(null);
+  const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(null);
+  const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(null);
+  const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(null);
+  const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(null);
+  const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(null);
 
   useEffect(() => {
     if(order){
