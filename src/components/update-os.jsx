@@ -207,104 +207,57 @@ export function UpdateOSDialog({ order }) {
 
   const idUser = order.id
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+  const handleUpdateOS = async (data) => {
+    
 
-    const fetchOrders = async () => {
-        try {
-            const response = await fetch(`https://os.estoquefacil.net/api/order-services/${token}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-        
-            const data = await response.json();
-            
-            const validData = data.map(order => {
-                // Função para remover propriedades com valores null ou undefined
-                const cleanOrder = (order) => {
-                    const result = { ...order };
-                    Object.keys(result).forEach(key => {
-                        if (result[key] === null || result[key] === undefined) {
-                            delete result[key];
-                        }
-                    });
-                    return result;
-                };
-
-                const cleanedOrder = cleanOrder({
-                    id: order.id || '',
-                    number: order.number || '',
-                    client_name: order.client_name || '',
-                    client_phone: order.client_phone || '',
-                    client_document: order.client_document || '',
-                    client_zipcode: order.client_zipcode || '',
-                    client_address: order.client_address || '',
-                    client_number: order.client_number || '',
-                    client_state: order.client_state || '',
-                    client_city: order.client_city || '',
-                    device_brand: order.device_brand || '',
-                    device_model: order.device_model || '',
-                    device_password: order.device_password || '',
-                    device_serial: order.device_serial || '',
-                    device_imei: order.device_imei || '',
-                    device_accessories: order.device_accessories || '',
-                    device_additional_info: order.device_additional_info || '',
-                    terms: order.terms,
-                    terms_two: order.terms_two,
-                    terms_three: order.terms_three,
-                    terms_four: order.terms_four,
-                    terms_five: order.terms_five,
-                    terms_six: order.terms_six,
-                    is_checked_terms: order.is_checked_terms,
-                    is_checked_terms_two: order.is_checked_terms_two,
-                    is_checked_terms_three: order.is_checked_terms_three,
-                    is_checked_terms_four: order.is_checked_terms_four,
-                    is_checked_terms_five: order.is_checked_terms_five,
-                    is_checked_terms_six: order.is_checked_terms_six,
-                    bills: order.bills || {},
-                    checklist: order.checklist || {
-                        device_turns_on: '',
-                        faulty_screen: '',
-                        restarting: '',
-                        locked: '',
-                        network: '',
-                        wifi: '',
-                        headset: '',
-                        microphone: '',
-                        speaker: '',
-                        frontal_camera: '',
-                        back_camera: '',
-                        biometry: '',
-                        front_sensors: '',
-                        touch: '',
-                        buttons: '',
-                        keyboard: '',
-                        casing: '',
-                        charger: '',
-                        backup: '',
-                    },
-                    status: order.status || 'Pendente',
-                    logo: order.logo || null,
-                    date: order.date || '',
-                    pdf_url: order.pdf_url || '',
-                });
-
-                return cleanedOrder;
-            });
-
-            setOrders(validData);
-            setFilteredOrders(validData);
-        } catch (error) {
-            console.error("Erro ao buscar os dados da API:", error);
-        } finally {
-            setLoading(false);
-        }
+    // Combine os dados do formulário com o valor total
+    const filteredData = {
+      ...data,
+      total_value,
+      is_checked_terms: isCheckedTerms,
+      is_checked_terms_two: isCheckedTermsTwo,
+      is_checked_terms_three: isCheckedTermsThree,
+      is_checked_terms_four: isCheckedTermsFour,
+      is_checked_terms_five: isCheckedTermsFive,
+      is_checked_terms_six: isCheckedTermsSix,
     };
 
-    fetchOrders();
-}, []);
+  
+    // Remove campos não marcados
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.terms_two;
+    if (!isCheckedTermsThree) delete filteredData.terms_three;
+    if (!isCheckedTermsFour) delete filteredData.terms_four;
+    if (!isCheckedTermsFive) delete filteredData.terms_five;
+    if (!isCheckedTermsSix) delete filteredData.terms_six;
 
+  
+    try {
+      setIsSubmitting(true);
+      if (submitButtonRef.current) submitButtonRef.current.disabled = true;
+
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${idUser}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filteredData),
+        mode: 'cors',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao atualizar a ordem de serviço.');
+      }
+  
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Erro ao atualizar a ordem de serviço.');
+    } finally {
+      setIsSubmitting(false);
+      if (submitButtonRef.current) submitButtonRef.current.disabled = false;
+    }
+  };
 
 
   const [imageUrl, setImageUrl] = useState('');
