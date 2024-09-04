@@ -36,7 +36,7 @@ export default function Home() {
   const [itemsPerPage] = useState(10); // Número de itens por página
   const [loading, setLoading] = useState(true); // Estado de loading
 
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
 
   useEffect(() => {
@@ -224,7 +224,8 @@ export default function Home() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleEditClick = () => {
+  const handleEditClick = (order) => {
+    setSelectedOrder(order)
     setIsDialogOpen(true);
   };
 
@@ -378,7 +379,7 @@ export default function Home() {
                                     
                     {isDialogOpen && (
         <Dialog open onOpenChange={handleCloseDialog}>
-          <UpdateOSDialog order={order} onClose={handleCloseDialog} />
+          <UpdateOSDialog order={selectedOrder} onClose={handleCloseDialog} />
         </Dialog>
       )}
                     </TableCell>
