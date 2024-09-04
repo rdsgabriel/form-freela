@@ -99,19 +99,11 @@ export function UpdateOSDialog({ order }) {
    // Controle de inicialização
   useEffect(() => {
     console.log('Order que chegou:', order);
+
     // Como não há dependências no array, o useEffect será executado apenas na montagem do componente.
   }, []);
   
-  useEffect(() => {
-    if(order){
-      setIsCheckedTerms(order.is_checked_terms);
-      setIsCheckedTermsTwo(order.is_checked_terms_two);
-      setIsCheckedTermsThree(order.is_checked_terms_three);
-      setIsCheckedTermsFour(order.is_checked_terms_four);
-      setIsCheckedTermsFive(order.is_checked_terms_five);
-      setIsCheckedTermsSix(order.is_checked_terms_six);
-    }
-  }, [order]);
+  
 
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
@@ -188,6 +180,19 @@ export function UpdateOSDialog({ order }) {
   const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(false);
   const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
   const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
+
+  useEffect(() => {
+    if(order){
+      setIsCheckedTerms(order.is_checked_terms);
+      setIsCheckedTermsTwo(order.is_checked_terms_two);
+      setIsCheckedTermsThree(order.is_checked_terms_three);
+      setIsCheckedTermsFour(order.is_checked_terms_four);
+      setIsCheckedTermsFive(order.is_checked_terms_five);
+      setIsCheckedTermsSix(order.is_checked_terms_six);
+    }
+  }, [order]);
+
+  console.log(isCheckedTerms, isCheckedTermsTwo,isCheckedTermsThree, isCheckedTermsFour, isCheckedTermsFive, isCheckedTermsSix)
 
   // Funções para atualizar o estado dos checkboxes
   const handleCheckboxChangeTerms = (e) => setIsCheckedTerms(e);
