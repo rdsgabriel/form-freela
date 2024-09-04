@@ -223,7 +223,7 @@ export default function Home() {
   };
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [edit, setEdit] = useState('');
+  const [edit, setEdit] = useState({});
 
   const handleEditClick = (edit) => {
     setEdit(edit)
