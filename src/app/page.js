@@ -223,8 +223,10 @@ export default function Home() {
   };
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [edit, setEdit] = useState('');
 
-  const handleEditClick = () => {
+  const handleEditClick = (edit) => {
+    setEdit(edit)
     setIsDialogOpen(true);
   };
 
@@ -356,7 +358,7 @@ export default function Home() {
                         <DropdownMenuContent className="w-48 p-2 bg-white shadow-lg rounded-lg">
                           <DropdownMenuItem
                             className="flex items-center p-2 text-[#29aae1] hover:bg-blue-50 rounded-lg"
-                            onClick={handleEditClick}
+                            onClick={handleEditClick(order)}
                           >
                             <Pencil className="mr-2 w-4 h-4" />
                             Editar
@@ -378,7 +380,7 @@ export default function Home() {
                                     
                     {isDialogOpen && (
         <Dialog open onOpenChange={handleCloseDialog}>
-          <UpdateOSDialog order={order} onClose={handleCloseDialog} />
+          <UpdateOSDialog order={edit} onClose={handleCloseDialog} />
         </Dialog>
       )}
                     </TableCell>
