@@ -225,12 +225,12 @@ export function UpdateOSDialog({ order }) {
 
   
     // Remove campos não marcados
-    if (!isCheckedTerms) delete filteredData.terms;
-    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
-    if (!isCheckedTermsThree) delete filteredData.termsThree;
-    if (!isCheckedTermsFour) delete filteredData.termsFour;
-    if (!isCheckedTermsFive) delete filteredData.termsFive;
-    if (!isCheckedTermsSix) delete filteredData.termsSix;
+    if (!data.is_checked_terms) delete filteredData.terms;
+    if (!data.is_checked_terms_two) delete filteredData.termsTwo;
+    if (!data.is_checked_terms_three) delete filteredData.termsThree;
+    if (!data.is_checked_terms_four) delete filteredData.termsFour;
+    if (!data.is_checked_terms_five) delete filteredData.termsFive;
+    if (!data.is_checked_terms_six) delete filteredData.termsSix;
 
   
     try {
