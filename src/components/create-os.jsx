@@ -161,17 +161,17 @@ export function CreateOSDialog() {
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-  if (!isCheckedTerms) delete filteredData.terms;
-  if (!isCheckedTermsTwo) delete filteredData.terms_two;
-  if (!isCheckedTermsThree) delete filteredData.terms_three;
-  if (!isCheckedTermsFour) delete filteredData.terms_four;
-  if (!isCheckedTermsFive) delete filteredData.terms_five;
-  if (!isCheckedTermsSix) delete filteredData.terms_six;
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.terms_two;
+    if (!isCheckedTermsThree) delete filteredData.terms_three;
+    if (!isCheckedTermsFour) delete filteredData.terms_four;
+    if (!isCheckedTermsFive) delete filteredData.terms_five;
+    if (!isCheckedTermsSix) delete filteredData.terms_six;
 
     
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    
+
 
     try {
       setIsSubmitting(true);
@@ -196,7 +196,7 @@ export function CreateOSDialog() {
 
       const result = await response.json();
 
-      window.location.reload();
+      console.log('o que vai enviar:', filteredData)
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;
