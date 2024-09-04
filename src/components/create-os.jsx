@@ -171,8 +171,7 @@ export function CreateOSDialog() {
     
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-
-
+  
     try {
       setIsSubmitting(true);
       if (submitButtonRef.current) submitButtonRef.current.disabled = true;
@@ -196,7 +195,7 @@ export function CreateOSDialog() {
 
       const result = await response.json();
 
-      console.log('o que vai enviar:', filteredData)
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;

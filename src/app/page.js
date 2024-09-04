@@ -55,7 +55,7 @@ export default function Home() {
         
         const data = await response.json();
         const validData = data.map(order => {
-          return {
+        return {
         id: order.id || '',
         number: order.number || '',
         client_name: order.client_name || '',
