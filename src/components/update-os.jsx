@@ -95,9 +95,13 @@ export function UpdateOSDialog({ order }) {
     control,
   });
 
-  const [initialValuesSet, setInitialValuesSet] = useState(false); // Controle de inicialização
+  const [initialValuesSet, setInitialValuesSet] = useState(false);
+   // Controle de inicialização
+  useEffect(() => {
+    console.log('Order que chegou:', order);
+    // Como não há dependências no array, o useEffect será executado apenas na montagem do componente.
+  }, []);
   
-
   useEffect(() => {
     if(order){
       setIsCheckedTerms(order.is_checked_terms);
