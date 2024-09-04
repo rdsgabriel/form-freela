@@ -378,7 +378,7 @@ export default function Home() {
             <AlertDialogHeader>
               <AlertDialogTitle className='text-xl'>Tem certeza de que deseja excluir a OS?</AlertDialogTitle>
               <AlertDialogDescription>
-               ` Esta ação não pode ser desfeita. Isso excluirá permanentemente a OS de ${selectedOrderDEL.client_name}.`
+               Esta ação não pode ser desfeita. Isso excluirá permanentemente a OS de{selectedOrderDEL.client_name}.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
