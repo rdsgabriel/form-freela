@@ -181,14 +181,18 @@ export function UpdateOSDialog({ order }) {
   const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
   const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
 
+  const transformToBoolean = (value) => {
+    return value === 1;
+  };
+
   useEffect(() => {
-    if(order){
-      setIsCheckedTerms(order.is_checked_terms);
-      setIsCheckedTermsTwo(order.is_checked_terms_two);
-      setIsCheckedTermsThree(order.is_checked_terms_three);
-      setIsCheckedTermsFour(order.is_checked_terms_four);
-      setIsCheckedTermsFive(order.is_checked_terms_five);
-      setIsCheckedTermsSix(order.is_checked_terms_six);
+    if (order) {
+      setIsCheckedTerms(transformToBoolean(order.is_checked_terms));
+      setIsCheckedTermsTwo(transformToBoolean(order.is_checked_terms_two));
+      setIsCheckedTermsThree(transformToBoolean(order.is_checked_terms_three));
+      setIsCheckedTermsFour(transformToBoolean(order.is_checked_terms_four));
+      setIsCheckedTermsFive(transformToBoolean(order.is_checked_terms_five));
+      setIsCheckedTermsSix(transformToBoolean(order.is_checked_terms_six));
     }
   }, []);
 
@@ -248,7 +252,7 @@ export function UpdateOSDialog({ order }) {
       if (!response.ok) {
         throw new Error('Erro ao atualizar a ordem de serviço.');
       }
-      
+
       window.location.reload();
     } catch (error) {
       console.error('Erro:', error);
