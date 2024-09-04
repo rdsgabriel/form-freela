@@ -196,6 +196,7 @@ export function CreateOSDialog() {
       const result = await response.json();
 
       window.location.reload();
+      
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
       if (submitButtonRef.current) submitButtonRef.current.disabled = false;

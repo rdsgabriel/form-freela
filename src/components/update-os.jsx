@@ -174,12 +174,12 @@ export function UpdateOSDialog({ order }) {
     : 0;
 
   // Estado dos checkboxes
-  const [isCheckedTerms, setIsCheckedTerms] = useState(null);
-  const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(null);
-  const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(null);
-  const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(null);
-  const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(null);
-  const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(null);
+  const [isCheckedTerms, setIsCheckedTerms] = useState(false);
+  const [isCheckedTermsTwo, setIsCheckedTermsTwo] = useState(false);
+  const [isCheckedTermsThree, setIsCheckedTermsThree] = useState(false);
+  const [isCheckedTermsFour, setIsCheckedTermsFour] = useState(false);
+  const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
+  const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
 
   useEffect(() => {
     if(order){
@@ -248,8 +248,8 @@ export function UpdateOSDialog({ order }) {
       if (!response.ok) {
         throw new Error('Erro ao atualizar a ordem de serviço.');
       }
-  
-      window.location.reload();
+      console.log('O que vai ser enviado:' filteredData)
+      
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao atualizar a ordem de serviço.');
@@ -467,7 +467,6 @@ export function UpdateOSDialog({ order }) {
             <Input id="termsSix" {...(isCheckedTermsSix ? {...register('terms_six')} : {})} defaultValue='A não retirada do dispositivo dentro de 90 dias corridos resultará em uma cobrança de custódia.' />
             {errors.terms_six && <p className="text-red-500 text-xs">{errors.terms_six.message}</p>}
           </div>
-          
         </div>
 
         <div className="space-y-4 pl-2">
