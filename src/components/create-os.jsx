@@ -161,12 +161,12 @@ export function CreateOSDialog() {
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
 
-    if (!isCheckedTerms) delete filteredData.terms;
-    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
-    if (!isCheckedTermsThree) delete filteredData.termsThree;
-    if (!isCheckedTermsFour) delete filteredData.termsFour;
-    if (!isCheckedTermsFive) delete filteredData.termsFive;
-    if (!isCheckedTermsSix) delete filteredData.termsSix;
+    if (!isCheckedTerms || !filteredData.terms) delete filteredData.terms;
+  if (!isCheckedTermsTwo || !filteredData.termsTwo) delete filteredData.termsTwo;
+  if (!isCheckedTermsThree || !filteredData.termsThree) delete filteredData.termsThree;
+  if (!isCheckedTermsFour || !filteredData.termsFour) delete filteredData.termsFour;
+  if (!isCheckedTermsFive || !filteredData.termsFive) delete filteredData.termsFive;
+  if (!isCheckedTermsSix || !filteredData.termsSix) delete filteredData.termsSix;
 
     
     const urlParams = new URLSearchParams(window.location.search);
