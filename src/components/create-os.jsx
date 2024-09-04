@@ -102,6 +102,8 @@ export function CreateOSDialog() {
   const [isCheckedTermsFive, setIsCheckedTermsFive] = useState(false);
   const [isCheckedTermsSix, setIsCheckedTermsSix] = useState(false);
 
+  
+
   useEffect(() => {
     setValue('is_checked_terms', isCheckedTerms);
     setValue('is_checked_terms_two', isCheckedTermsTwo);
@@ -158,6 +160,13 @@ export function CreateOSDialog() {
 
   const handleCreateOS = async (data) => {
     const filteredData = { ...data, total_value };
+
+    if (!isCheckedTerms) delete filteredData.terms;
+    if (!isCheckedTermsTwo) delete filteredData.termsTwo;
+    if (!isCheckedTermsThree) delete filteredData.termsThree;
+    if (!isCheckedTermsFour) delete filteredData.termsFour;
+    if (!isCheckedTermsFive) delete filteredData.termsFive;
+    if (!isCheckedTermsSix) delete filteredData.termsSix;
 
     
     const urlParams = new URLSearchParams(window.location.search);
