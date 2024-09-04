@@ -9,6 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
 import { Dialog, DialogTrigger,  } from "@/components/ui/dialog";
@@ -36,15 +37,9 @@ export default function Home() {
   const [itemsPerPage] = useState(10); // Número de itens por página
   const [loading, setLoading] = useState(true); // Estado de loading
 
-  const [itemToDelete, setItemToDelete] = useState(null);
-
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-
-   
-
     const fetchOrders = async () => {
         try {
             const response = await fetch(`https://os.estoquefacil.net/api/order-services/${token}`);
@@ -106,7 +101,6 @@ export default function Home() {
           charger: '',
           backup: '',
         },
-        status: order.status || 'Pendente',
         logo: order.logo || null,
         date: order.date || '',
         pdf_url: order.pdf_url || '',
@@ -123,8 +117,6 @@ export default function Home() {
     };
 
     fetchOrders();
-
-
   }, []);
 
   const handleStatusChange = useCallback((id, newStatus) => {
@@ -143,8 +135,7 @@ export default function Home() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ status: newStatus }),
-          mode: 'cors',
+          body: JSON.stringify({ status: newStatus })
         });
   
         if (!response.ok) {
@@ -152,6 +143,12 @@ export default function Home() {
         }
       } catch (error) {
         console.error("Erro ao atualizar o status:", error);
+        // Caso haja um erro, você pode optar por reverter a mudança visual
+        const revertedOrders = orders.map(order =>
+          order.id === id ? { ...order, status: orders.find(o => o.id === id).status } : order
+        );
+        setOrders(revertedOrders);
+        setFilteredOrders(filterOrders(revertedOrders));
       }
     };
   
@@ -194,26 +191,20 @@ export default function Home() {
     window.history.back();
   };
 
-  const handleDelete = async (number) => {
-
-    const userConfirmed = window.confirm("Você tem certeza que deseja excluir esta ordem de serviço?");
-    
-    if (!userConfirmed) {
-        return; // Se o usuário cancelar, a função termina aqui e nada é excluído
-    }
+  const handleDelete = async (id) => {
     // Remover imediatamente a ordem de serviço da interface
-    setOrders(prevOrders => prevOrders.filter(order => order.number !== number));
-    setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.number !== number));
+    setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
+    setFilteredOrders(prevFilteredOrders => prevFilteredOrders.filter(order => order.id !== id));
   
     try {
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/del/${number}`, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/del/${id}`, {
         method: 'DELETE'
       });
   
       if (!response.ok) {
         throw new Error('Erro ao deletar a ordem de serviço');
       }
-      
+  
     
     } catch (error) {
       console.error('Erro ao excluir a ordem de serviço:', error);
@@ -362,7 +353,8 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleDelete(order.number)}
+                            onClick={openDeleteDialog}
+                              
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
                             <Trash className="mr-2 w-4 h-4" />
@@ -372,7 +364,26 @@ export default function Home() {
                       </DropdownMenuPortal>
                     </DropdownMenu>
 
-                 
+                    {isDialogDelete && (
+        <AlertDialog  open onOpenChange={setIsDialogDelete} className='bg-black/10 bg-opacity-30'>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className='text-xl'>Tem certeza de que deseja excluir a OS?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta ação não pode ser desfeita. Isso excluirá permanentemente a Ordem de Serviço.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              
+              <AlertDialogAction onClick={() => handleDelete(order.id)}
+                className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
+                >Excluir</AlertDialogAction>
+
+<AlertDialogCancel>Cancelar</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
                   
                     
                                     
