@@ -99,6 +99,7 @@ export function UpdateOSDialog({ order }) {
   
 
   useEffect(() => {
+    console.log(order)
     if(order){
       setIsCheckedTerms(order.is_checked_terms);
       setIsCheckedTermsTwo(order.is_checked_terms_two);
