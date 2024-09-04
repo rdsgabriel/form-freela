@@ -383,7 +383,7 @@ export default function Home() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={handleDelete(selectedOrderDEL)}
+              <AlertDialogAction onClick={() => handleDelete(selectedOrderDEL)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
