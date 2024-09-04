@@ -248,8 +248,8 @@ export function UpdateOSDialog({ order }) {
       if (!response.ok) {
         throw new Error('Erro ao atualizar a ordem de serviço.');
       }
-      console.log('O que vai ser enviado:', filteredData)
       
+      window.location.reload();
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao atualizar a ordem de serviço.');
