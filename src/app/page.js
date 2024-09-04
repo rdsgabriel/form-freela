@@ -361,7 +361,7 @@ export default function Home() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => openDeleteDialog(order.number)}
+                            onClick={() => openDeleteDialog(order)}
                             className="flex items-center p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           >
                             <Trash className="mr-2 w-4 h-4" />
@@ -378,12 +378,12 @@ export default function Home() {
             <AlertDialogHeader>
               <AlertDialogTitle className='text-xl'>Tem certeza de que deseja excluir a OS?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esta ação não pode ser desfeita. Isso excluirá permanentemente a Ordem de Serviço.
+               ` Esta ação não pode ser desfeita. Isso excluirá permanentemente a OS de ${selectedOrderDEL.client_name}.`
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               
-              <AlertDialogAction onClick={() => handleDelete(selectedOrderDEL)}
+              <AlertDialogAction onClick={() => handleDelete(selectedOrderDEL.number)}
                 className='bg-white text-red-500 border border-red-300 hover:bg-red-100'
                 >Excluir</AlertDialogAction>
 
