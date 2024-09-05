@@ -153,7 +153,7 @@ const handleStatusChange = useCallback((id, newStatus) => {
   // Em seguida, enviar a requisição para o servidor
   const updateStatusOnServer = async () => {
     try {
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/status/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

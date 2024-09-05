@@ -15,8 +15,6 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useRef  } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
-import Image from 'next/image';
-import darkLogo from '../app/dark-logo.png'
 
 const billSchema = z.array(
   z.object({
