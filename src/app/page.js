@@ -139,36 +139,43 @@ export default function Home() {
 }, []);
 
 
-  const handleStatusChange = useCallback((id, newStatus) => {
-    // Atualizar o estado imediatamente
-    const updatedOrders = orders.map(order =>
-      order.id === id ? { ...order, status: newStatus } : order
-    );
-    setOrders(updatedOrders);
-    setFilteredOrders(filterOrders(updatedOrders));
-  
-    // Em seguida, enviar a requisição para o servidor
-    const updateStatusOnServer = async () => {
-      try {
-        const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ status: newStatus }),
-          mode: 'cors',
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to update status');
-        }
-      } catch (error) {
-        console.error("Erro ao atualizar o status:", error);
+const handleStatusChange = useCallback((id, newStatus) => {
+  // Fazer uma cópia do estado anterior para possível reversão
+  const previousOrders = [...orders];
+
+  // Atualizar o estado imediatamente
+  const updatedOrders = orders.map(order =>
+    order.id === id ? { ...order, status: newStatus } : order
+  );
+  setOrders(updatedOrders);
+  setFilteredOrders(filterOrders(updatedOrders));
+
+  // Em seguida, enviar a requisição para o servidor
+  const updateStatusOnServer = async () => {
+    try {
+      const response = await fetch(`https://os.estoquefacil.net/api/order-services/update/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus }),
+        mode: 'cors',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
       }
-    };
-  
-    updateStatusOnServer();
-  }, [orders]);
+    } catch (error) {
+      console.error("Erro ao atualizar o status:", error);
+
+      // Reverter a alteração no estado se a atualização falhar
+      setOrders(previousOrders);
+      setFilteredOrders(filterOrders(previousOrders));
+    }
+  };
+
+  updateStatusOnServer();
+}, [orders]);
   
   const handleFilter = (filters) => {
     setFilteredOrders(filterOrders(orders, filters));

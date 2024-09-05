@@ -15,8 +15,6 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useEffect, useRef } from "react";
 import { PlusCircle, Trash } from 'lucide-react';
-import Image from 'next/image';
-import darkLogo from '../app/dark-logo.png'
 
 const billSchema = z.array(
   z.object({
@@ -25,6 +23,7 @@ const billSchema = z.array(
     value: z.number().positive('Por favor, informe um valor válido')
   })
 ).min(1, 'Você deve incluir pelo menos um item.');
+
 
 const isClient = typeof window !== 'undefined' && typeof FileList !== 'undefined';
 
@@ -67,7 +66,7 @@ const createOSSchema = z.object({
   device_model: z.string().min(1, "Modelo do dispositivo é obrigatório"),
   device_password: z.string().min(1, "Senha do dispositivo é obrigatória"),
   device_serial: z.string().min(1, "Número de série do dispositivo é obrigatório"),
-  device_imei: z.string().min(15, "IMEI do dispositivo é obrigatório ter no mínimo 15 dígitos."),
+  device_imei: z.string().min(1, "IMEI do dispositivo é obrigatório ter no mínimo 15 dígitos."),
   device_accessories: z.string(),
   device_additional_info: z.string(),
   terms: z.string().optional(),
@@ -97,12 +96,6 @@ export function UpdateOSDialog({ order }) {
 
   const [initialValuesSet, setInitialValuesSet] = useState(false);
    // Controle de inicialização
-  useEffect(() => {
-    console.log('Order que chegou:', order);
-
-    // Como não há dependências no array, o useEffect será executado apenas na montagem do componente.
-  }, []);
-  
   
 
   const formatDate = (date) => {
@@ -416,14 +409,18 @@ export function UpdateOSDialog({ order }) {
         {/* Seção: Termos e Peças de Serviço */}
         <div className="space-y-4 pl-2">
         <h2 className="text-lg font-semibold bg-[#29aae1] text-white  pl-2 py-2">Termos de Serviço / Garantia</h2>
+        
         <div className="space-y-2 flex gap-2 items-center">
+
             <Checkbox  className="w-4 h-4 data-[state=checked]:bg-[var(--primary)]"
-      style={{ "--primary":'#29aae1' }}
-      checked={isCheckedTerms}
-      onCheckedChange={handleCheckboxChangeTerms}
-      />
+              style={{ "--primary":'#29aae1' }}
+              checked={isCheckedTerms}
+              onCheckedChange={handleCheckboxChangeTerms}
+              />
+
             <Input id="terms" {...(isCheckedTerms ? {...register('terms')} : {})} defaultValue='A garantia de 90 dias será apenas para a peça ou serviço trocado descrito nesta O.S.' />
             {errors.terms && <p className="text-red-500 text-xs">{errors.terms.message}</p>}
+
         </div>
 
           <div className="space-y-2 flex gap-2 items-center">
@@ -906,7 +903,7 @@ export function UpdateOSDialog({ order }) {
 
 
           <DialogClose asChild className="ml-2">
-            <Button variant='outline' >Cancelar</Button>
+            <Button variant='outline'>Cancelar</Button>
             </DialogClose>
         </DialogFooter>
       </form>
