@@ -205,7 +205,6 @@ export function CreateOSDialog() {
     }
   };
 
-  const [imageUrl, setImageUrl] = useState('');
 
     const fetchImageUrl = async () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -255,9 +254,7 @@ export function CreateOSDialog() {
               </div>
             </div>
 
-            <div className='ml-4  m-4 mt-2'>
-            {imageUrl && <img src={imageUrl} alt="Logo" />}
-            </div>
+           
 
           </div>
 
