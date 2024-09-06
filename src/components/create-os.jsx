@@ -282,7 +282,7 @@ const handleClientClick = (client) => {
                 <Input id="date" {...register('date')} />
                 {errors.date && <p className="text-red-500 text-xs">{errors.date.message}</p>}
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 relative">
                 <Label htmlFor="number">Número de ordem</Label>
                 <Input id="number" {...register('number')} defaultValue={orderNumber} readOnly/>
                 {errors.number && <p className="text-red-500 text-xs">{errors.number.message}</p>}
@@ -308,19 +308,21 @@ const handleClientClick = (client) => {
             onChange={handleInputChange} />
           {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
         </div>
+
+
         {filteredClients.length > 0 && (
-              <ul className="border border-gray-300 rounded mt-2 max-h-40 overflow-y-auto">
-                {filteredClients.map((client) => (
-                  <li
-                    key={client.id}
-                    className="p-2 cursor-pointer hover:bg-gray-200"
-                    onClick={() => handleClientClick(client)}
-                  >
-                    {client.name}
-                  </li>
-                ))}
-              </ul>
-            )}
+    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-y-auto shadow-lg">
+      {filteredClients.map((client) => (
+        <li
+          key={client.id}
+          className="p-2 cursor-pointer hover:bg-gray-200"
+          onClick={() => handleClientClick(client)}
+        >
+          {client.name}
+        </li>
+      ))}
+    </ul>
+  )}
 
             <div className="space-y-2">
               <Label htmlFor="client_phone">Telefone</Label>
