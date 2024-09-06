@@ -224,9 +224,9 @@ export function CreateOSDialog() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     fetchClients(token);
+    console.log(clients)
   }, []);
 
-  console.log(clients)
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
