@@ -55,17 +55,17 @@ const createOSSchema = z.object({
   number: z.string().min(1, "Número é obrigatório"),
   client_name: z.string().min(1, "Nome do cliente é obrigatório"),
   client_phone: z.string().min(1, "Telefone do cliente é obrigatório"),
-  client_document: z.string().min(1, "Documento do cliente é obrigatório"),
-  client_zipcode: z.string().min(1, "CEP do cliente é obrigatório"),
-  client_address: z.string().min(1, "Endereço do cliente é obrigatório"),
-  client_number: z.string().min(1, "Número do cliente é obrigatório"),
-  client_state: z.string().min(1, "Estado do cliente é obrigatório"),
-  client_city: z.string().min(1, "Cidade do cliente é obrigatória"),
-  device_brand: z.string().min(1, "Marca do dispositivo é obrigatória"),
-  device_model: z.string().min(1, "Modelo do dispositivo é obrigatório"),
-  device_password: z.string().min(1, "Senha do dispositivo é obrigatória"),
-  device_serial: z.string().min(1, "Número de série do dispositivo é obrigatório"),
-  device_imei: z.string().min(1, "IMEI do dispositivo é obrigatório ter no mínimo 15 digitos."),
+  client_document: z.string().optional(),
+  client_zipcode: z.string().optional(),
+  client_address: z.string().optional(),
+  client_number: z.string().optional(),
+  client_state: z.string().optional(),
+  client_city: z.string().optional(),
+  device_brand: z.string().optional(),
+  device_model: z.string().optional(),
+  device_password: z.string().optional(),
+  device_serial: z.string().optional(),
+  device_imei: z.string().optional(),
   device_accessories: z.string(),
   device_additional_info: z.string(),
   terms: z.string().optional(),
@@ -233,7 +233,7 @@ export function CreateOSDialog() {
     setSearchTerm(inputValue);
 
     // Se o valor tiver menos de 3 caracteres, não faz nada
-    if (inputValue.length < 3) {
+    if (inputValue.length < 2) {
       return;
     }
 
@@ -251,13 +251,14 @@ export function CreateOSDialog() {
         // Atualiza os campos do formulário com os dados do cliente encontrado
         setValue('client_name', matchingClient.name);
         setValue('client_phone', matchingClient.phone_number);
-        setValue('client_document', matchingClient.tax_no || '');
         setValue('client_address', matchingClient.address);
         setValue('client_state', matchingClient.state);
         setValue('client_city', matchingClient.city);
+        setValue('client_zipcode', matchingClient.postal_code)
       }
     }, 300);  // 300ms de debounce
   };
+
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
       <DialogHeader>
