@@ -320,7 +320,7 @@ useEffect(() => {
           {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
 
           {filteredClients.length > 0 && (
-    <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
+    <ul className="absolute z-10 w-[30%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
       {filteredClients.map((client) => (
         <li
           key={client.id}
