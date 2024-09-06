@@ -205,59 +205,62 @@ export function CreateOSDialog() {
 
 
   const [clients, setClients] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
+const [filteredClients, setFilteredClients] = useState([]); // Clientes filtrados para exibir
+const timeoutRef = useRef(null);
 
-  const timeoutRef = useRef(null);
+// Função para buscar os clientes da API
+const fetchClients = async (token) => {
+  try {
+    const response = await fetch(`https://os.estoquefacil.net/api/order-services/client/${token}`);
+    const data = await response.json();
+    setClients(data);
+  } catch (error) {
+    console.error('Erro ao buscar clientes:', error);
+  }
+};
 
-  // Função para buscar os clientes da API
-  const fetchClients = async (token) => {
-    try {
-      const response = await fetch(`https://os.estoquefacil.net/api/order-services/client/${token}`);
-      const data = await response.json();
-      setClients(data);
-    } catch (error) {
-      console.error('Erro ao buscar clientes:', error);
-    }
-  };
+useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  fetchClients(token);
+}, []);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    fetchClients(token);
-    console.log(clients)
-  }, []);
+// Manipular a mudança de entrada
+const handleInputChange = (e) => {
+  const inputValue = e.target.value;
+  setSearchTerm(inputValue);
 
+  if (inputValue.length < 2) {
+    setFilteredClients([]); // Limpar sugestões se o termo for muito curto
+    return;
+  }
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    setSearchTerm(inputValue);
+  // Limpa o timeout anterior
+  if (timeoutRef.current) {
+    clearTimeout(timeoutRef.current);
+  }
 
-    // Se o valor tiver menos de 3 caracteres, não faz nada
-    if (inputValue.length < 2) {
-      return;
-    }
+  // Configura um timeout para debounce
+  timeoutRef.current = setTimeout(() => {
+    const matchingClients = clients.filter(client =>
+      client.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setFilteredClients(matchingClients);
+  }, 300);  // 300ms de debounce
+};
 
-    // Limpa o timeout anterior
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    // Configura um timeout para debounce
-    timeoutRef.current = setTimeout(() => {
-      const matchingClient = clients.find(client =>
-        client.name.toLowerCase().includes(inputValue.toLowerCase())
-      );
-      if (matchingClient) {
-        // Atualiza os campos do formulário com os dados do cliente encontrado
-        setValue('client_name', matchingClient.name);
-        setValue('client_phone', matchingClient.phone_number);
-        setValue('client_address', matchingClient.address);
-        setValue('client_state', matchingClient.state);
-        setValue('client_city', matchingClient.city);
-        setValue('client_zipcode', matchingClient.postal_code)
-      }
-    }, 300);  // 300ms de debounce
-  };
+// Função para preencher os campos ao clicar no nome do cliente
+const handleClientClick = (client) => {
+  setValue('client_name', client.name);
+  setValue('client_phone', client.phone_number);
+  setValue('client_address', client.address);
+  setValue('client_state', client.state);
+  setValue('client_city', client.city);
+  setValue('client_zipcode', client.postal_code);
+  setSearchTerm(client.name); // Atualizar o campo de busca com o nome selecionado
+  setFilteredClients([]); // Limpar sugestões após seleção
+};
 
 
   return (
@@ -305,6 +308,19 @@ export function CreateOSDialog() {
             onChange={handleInputChange} />
           {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
         </div>
+        {filteredClients.length > 0 && (
+              <ul className="border border-gray-300 rounded mt-2 max-h-40 overflow-y-auto">
+                {filteredClients.map((client) => (
+                  <li
+                    key={client.id}
+                    className="p-2 cursor-pointer hover:bg-gray-200"
+                    onClick={() => handleClientClick(client)}
+                  >
+                    {client.name}
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="client_phone">Telefone</Label>
