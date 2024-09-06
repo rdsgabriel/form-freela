@@ -259,6 +259,7 @@ const handleClientClick = (client) => {
   setValue('client_city', client.city ?? '');
   setValue('client_zipcode', client.postal_code ?? '');
   setValue('client_document', client.document ?? '')
+  setValue('client_number', client.number ?? '')
   setSearchTerm(client.name); // Atualizar o campo de busca com o nome selecionado ou string vazia
   setFilteredClients([]); // Limpar sugestões após seleção
 };
