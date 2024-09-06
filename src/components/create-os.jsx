@@ -254,11 +254,11 @@ const handleInputChange = (e) => {
 const handleClientClick = (client) => {
   setValue('client_name', client.name);
   setValue('client_phone', client.phone_number);
-  setValue('client_address', client.address);
-  setValue('client_state', client.state);
-  setValue('client_city', client.city);
-  setValue('client_zipcode', client.postal_code);
-  setSearchTerm(client.name); // Atualizar o campo de busca com o nome selecionado
+  setValue('client_address', client.address ?? '');
+  setValue('client_state', client.state ?? '');
+  setValue('client_city', client.city ?? '');
+  setValue('client_zipcode', client.postal_code ?? '');
+  setSearchTerm(client.name); // Atualizar o campo de busca com o nome selecionado ou string vazia
   setFilteredClients([]); // Limpar sugestões após seleção
 };
 
