@@ -259,17 +259,6 @@ export function CreateOSDialog() {
     }, 300);  // 300ms de debounce
   };
 
-  useEffect(() => {
-    const form = document.querySelector('form');
-    if (form) {
-      form.setAttribute('autocomplete', 'off');
-    }
-    const inputs = form.querySelectorAll('input');
-    inputs.forEach((input) => {
-      input.setAttribute('autocomplete', 'off');
-      input.setAttribute('name', `disable_autofill_${Math.random()}`);
-    });
-  }, []);
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
@@ -278,7 +267,7 @@ export function CreateOSDialog() {
         <DialogDescription className="text-sm text-gray-600 pl-2">Preencha todas as informações abaixo para criar uma nova OS.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(handleCreateOS)} autoComplete="off" className="space-y-10">
+      <form onSubmit={handleSubmit(handleCreateOS)}  className="space-y-10">
         
         {/* Seção: Informações Gerais */}
         <div className="space-y-4 pl-2">
