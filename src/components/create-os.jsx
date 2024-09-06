@@ -306,7 +306,7 @@ useEffect(() => {
 
 
         </div>
-        
+
         {/* Seção: Dados do Cliente */}
         <div className="space-y-4 pl-2">
           <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Dados do Cliente</h2>
@@ -320,22 +320,22 @@ useEffect(() => {
           {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
 
           {filteredClients.length > 0 && (
-    <ul className="absolute z-10 w-[31%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
-      {filteredClients.map((client) => (
-        <li
-          key={client.id}
-          className="p-2 cursor-pointer hover:bg-[#29aae1] hover:bg-opacity-10 border-b-gray-300 border-1"
-          onClick={() => handleClientClick(client)}
-        >
-          {client.name}
-        </li>
-      ))}
-    </ul>
-  )}
+              <ul className="absolute z-10 w-[31%] bg-white border border-gray-300 rounded mt-14 max-h-40 overflow-y-auto shadow-lg">
+                {filteredClients.map((client) => (
+                  <li
+                    key={client.id}
+                    className="p-2 cursor-pointer hover:bg-[#29aae1] hover:bg-opacity-10 border-b-gray-300 border-1"
+                    onClick={() => handleClientClick(client)}
+                  >
+                    {client.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+
         </div>
 
 
-       
 
             <div className="space-y-2">
               <Label htmlFor="client_phone">Telefone</Label>
