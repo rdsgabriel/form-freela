@@ -324,7 +324,7 @@ useEffect(() => {
       {filteredClients.map((client) => (
         <li
           key={client.id}
-          className="p-2 cursor-pointer hover:bg-blue-100 border-b-gray-300 border-1"
+          className="p-2 cursor-pointer hover:bg-[#29aae1] hover:bg-opacity-10 border-b-gray-300 border-1"
           onClick={() => handleClientClick(client)}
         >
           {client.name}
