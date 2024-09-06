@@ -311,7 +311,7 @@ const handleClientClick = (client) => {
 
 
         {filteredClients.length > 0 && (
-    <ul className="absolute w-full top-full bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-y-auto shadow-lg">
+    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-10 max-h-40 overflow-y-auto shadow-lg">
       {filteredClients.map((client) => (
         <li
           key={client.id}
