@@ -322,7 +322,7 @@ useEffect(() => {
 
 
         {filteredClients.length > 0 && (
-    <ul className="absolute z-10 w-[25%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
+    <ul className="absolute z-10 w-[28%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
       {filteredClients.map((client) => (
         <li
           key={client.id}
