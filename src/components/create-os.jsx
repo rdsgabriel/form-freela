@@ -266,7 +266,7 @@ export function CreateOSDialog() {
         <DialogDescription className="text-sm text-gray-600 pl-2">Preencha todas as informações abaixo para criar uma nova OS.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(handleCreateOS)} className="space-y-10">
+      <form onSubmit={handleSubmit(handleCreateOS)} autoComplete="off" className="space-y-10">
         
         {/* Seção: Informações Gerais */}
         <div className="space-y-4 pl-2">
