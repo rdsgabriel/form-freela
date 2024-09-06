@@ -322,11 +322,11 @@ useEffect(() => {
 
 
         {filteredClients.length > 0 && (
-    <ul className="absolute z-10 w-1/3 bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
+    <ul className="absolute z-10 w-[25%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
       {filteredClients.map((client) => (
         <li
           key={client.id}
-          className="p-2 cursor-pointer hover:bg-blue-200 border-b-gray-300 border-1"
+          className="p-2 cursor-pointer hover:bg-blue-100 border-b-gray-300 border-1"
           onClick={() => handleClientClick(client)}
         >
           {client.name}
