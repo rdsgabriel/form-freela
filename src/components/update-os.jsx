@@ -51,9 +51,7 @@ const createOSSchema = z.object({
     charger: z.string().nonempty("Campo obrigatório"),
     backup: z.string().nonempty("Campo obrigatório"),
   }),
-  logo: isClient
-    ? z.instanceof(FileList).transform(list => list.item(0)).optional()
-    : z.any(),
+  logo: z.any().optional(),
   date: z.string().min(1, "Data é obrigatório"),
   number: z.string().min(1, "Número é obrigatório"),
   client_name: z.string().min(1, "Nome do cliente é obrigatório"),
@@ -77,12 +75,12 @@ const createOSSchema = z.object({
   terms_four: z.string().optional(),
   terms_five: z.string().optional(),
   terms_six: z.string().optional(),
-  is_checked_terms: z.boolean(),
-  is_checked_terms_two: z.boolean(),
-  is_checked_terms_three: z.boolean(),
-  is_checked_terms_four: z.boolean(),
-  is_checked_terms_five: z.boolean(),
-  is_checked_terms_six: z.boolean(),
+  is_checked_terms: z.boolean().optional(),
+  is_checked_terms_two: z.boolean().optional(),
+  is_checked_terms_three: z.boolean().optional(),
+  is_checked_terms_four: z.boolean().optional(),
+  is_checked_terms_five: z.boolean().optional(),
+  is_checked_terms_six: z.boolean().optional(),
   bills: billSchema,
 });
 
