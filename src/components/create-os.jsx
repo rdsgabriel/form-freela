@@ -318,11 +318,9 @@ useEffect(() => {
            {...register('client_name')}
             onChange={handleInputChange} />
           {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
-        </div>
 
-
-        {filteredClients.length > 0 && (
-    <ul className="absolute z-10 w-[28%] bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
+          {filteredClients.length > 0 && (
+    <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-16 max-h-40 overflow-y-auto shadow-lg">
       {filteredClients.map((client) => (
         <li
           key={client.id}
@@ -334,6 +332,10 @@ useEffect(() => {
       ))}
     </ul>
   )}
+        </div>
+
+
+       
 
             <div className="space-y-2">
               <Label htmlFor="client_phone">Telefone</Label>
