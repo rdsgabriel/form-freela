@@ -226,6 +226,8 @@ export function CreateOSDialog() {
     fetchClients(token);
   }, []);
 
+  console.log(clients)
+
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
     setSearchTerm(inputValue);
