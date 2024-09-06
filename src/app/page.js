@@ -19,6 +19,7 @@ import { OSFilters } from "@/components/os-filters";
 import { CreateOSDialog } from "@/components/create-os";
 import { UpdateOSDialog } from "@/components/update-os";
 
+
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from "@/components/ui/dropdown-menu";
 
 const removeAccents = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -280,6 +281,7 @@ const handleStatusChange = useCallback((id, newStatus) => {
             </DialogTrigger>
             <CreateOSDialog />
           </Dialog>
+
 
           <OSFilters onFilter={handleFilter} />
         </div>
