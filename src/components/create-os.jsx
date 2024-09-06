@@ -205,8 +205,10 @@ export function CreateOSDialog() {
 
 
   const [clients, setClients] = useState([]);
-  const [filteredClient, setFilteredClient] = useState(null);
-  
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const timeoutRef = useRef(null);
+
   // Função para buscar os clientes da API
   const fetchClients = async (token) => {
     try {
@@ -217,8 +219,7 @@ export function CreateOSDialog() {
       console.error('Erro ao buscar clientes:', error);
     }
   };
-  
-  // Executa a busca dos clientes quando o componente é montado
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -226,19 +227,35 @@ export function CreateOSDialog() {
   }, []);
 
   const handleInputChange = (e) => {
-    const inputValue = e.target.value.toLowerCase();
-    const matchingClient = clients.find(client => client.name.toLowerCase().includes(inputValue));
-    if (matchingClient) {
-      // Atualiza os campos do formulário com os dados do cliente encontrado
-      setValue('client_name', matchingClient.name);
-      setValue('client_phone', matchingClient.phone_number);
-      setValue('client_document', matchingClient.tax_no || '');
-      setValue('client_address', matchingClient.address);
-      setValue('client_state', matchingClient.state);
-      setValue('client_city', matchingClient.city);
-    }
-  };
+    const inputValue = e.target.value;
+    setSearchTerm(inputValue);
 
+    // Se o valor tiver menos de 3 caracteres, não faz nada
+    if (inputValue.length < 3) {
+      return;
+    }
+
+    // Limpa o timeout anterior
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Configura um timeout para debounce
+    timeoutRef.current = setTimeout(() => {
+      const matchingClient = clients.find(client =>
+        client.name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      if (matchingClient) {
+        // Atualiza os campos do formulário com os dados do cliente encontrado
+        setValue('client_name', matchingClient.name);
+        setValue('client_phone', matchingClient.phone_number);
+        setValue('client_document', matchingClient.tax_no || '');
+        setValue('client_address', matchingClient.address);
+        setValue('client_state', matchingClient.state);
+        setValue('client_city', matchingClient.city);
+      }
+    }, 300);  // 300ms de debounce
+  };
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
       <DialogHeader>
@@ -277,10 +294,14 @@ export function CreateOSDialog() {
           <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Dados do Cliente</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-    <Label htmlFor="client_name">Nome do Cliente</Label>
-    <Input id="client_name" {...register('client_name')} onChange={handleInputChange} />
-    {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
-  </div>
+          <Label htmlFor="client_name">Nome do Cliente</Label>
+          <Input id="client_name"
+            value={searchTerm}
+           {...register('client_name')}
+            onChange={handleInputChange} />
+          {errors.client_name && <p className="text-red-500 text-xs">{errors.client_name.message}</p>}
+        </div>
+
             <div className="space-y-2">
               <Label htmlFor="client_phone">Telefone</Label>
               <Input id="client_phone" {...register('client_phone')} />
