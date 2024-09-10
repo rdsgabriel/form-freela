@@ -20,11 +20,11 @@ const billSchema = z.array(
   z.object({
     description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
     amount: z.preprocess(
-      (value) => (value === '' ? 0 : value),
+      (value) => (isNaN(value) || value === null || value === undefined ? 0 : value),
       z.number().positive('Por favor, informe um valor válido.')
     ),
     value: z.preprocess(
-      (value) => (value === '' ? 0 : value),
+      (value) => (isNaN(value) || value === null || value === undefined ? 0 : value),
       z.number().positive('Por favor, informe um valor válido.')
     )
   })
