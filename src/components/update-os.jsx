@@ -753,94 +753,99 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
 
 
 <div className="space-y-4 pl-2">
-        {/* Seção: Valores */}
-        <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Orçamento</h2>
+  {/* Seção: Valores */}
+  <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Orçamento</h2>
 
-        {fields.map((field, index) => (
-  <div key={field.id} className="border p-4 rounded-md shadow-sm mb-4">
-    
-    <div className="mb-4">
-      <Label htmlFor={`description-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
-        Descrição
-      </Label>
-      <Input
-        id={`description-${index}`}
-        {...register(`bills.${index}.description`)}
-        type='text'
-        placeholder="Descrição"
-        className="border-gray-300 rounded-md shadow-sm"
-      />
-      {errors.bills?.[index]?.description && (
-        <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].description.message}
-        </p>
-      )}
-    </div>
+  {/* Verifique se o array fields está vazio e adicione um item inicial */}
+  {fields.length === 0 && (
+    <p className="text-gray-500 text-sm">Nenhum item adicionado. Clique no botão abaixo para adicionar um item ao orçamento.</p>
+  )}
 
-    <div className="mb-4">
-      <Label htmlFor={`amount-${index}`} className="block mb-1 text-sm font-medium text-gray-700" defaultValue>
-        Quantidade
-      </Label>
-      <Input
-        id={`amount-${index}`}
-        {...register(`bills.${index}.amount`, { valueAsNumber: true }) }
-        type='number'
-        placeholder="Quantidade"
-        className="border-gray-300 rounded-md shadow-sm"
-      />
-      {errors.bills?.[index]?.amount && (
-        <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].amount.message}
-        </p>
-      )}
-    </div>
-
-    <div className="mb-4">
-      <Label htmlFor={`value-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
-        Valor
-      </Label>
-      <Input
-        id={`value-${index}`}
-        {...register(`bills.${index}.value`, { valueAsNumber: true })}
-        type='number'
-        placeholder="Valor"
-        className="border-gray-300 rounded-md shadow-sm"
-      />
-      {errors.bills?.[index]?.value && (
-        <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].value.message}
-        </p>
-      )}
-    </div>
-  
-    <Button type='button' variant='outline' onClick={() => remove(index)} className="flex items-center text-black hover:text-red-500">
-      <Trash className="mr-2 w-4" />
-      Remover
-    </Button>
-  </div>
-))}
-
-<Button type='button' variant='outline' className='bg-[#29aae1] text-white hover:bg-cyan-500 hover:text-white' onClick={() => append({
-  description: '',
-  amount: 0,
-})}>
-  <PlusCircle />
-  <span className='ml-2 text-white'>Adicionar item</span>
-</Button>
-
-<div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-  <p className="text-xl font-bold text-gray-800">
-    Valor Total: <span className="text-green-600">R$ {total_value.toFixed(2)}</span>
-  </p>
-</div>
-
-
-{errors?.bills && (
-        <p className="text-red-500 text-xs">
-          {errors.bills?.message}
-        </p>
-      )}
+  {/* Mapear os campos de bills */}
+  {fields.map((field, index) => (
+    <div key={field.id} className="border p-4 rounded-md shadow-sm mb-4">
+      
+      <div className="mb-4">
+        <Label htmlFor={`description-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+          Descrição
+        </Label>
+        <Input
+          id={`description-${index}`}
+          {...register(`bills.${index}.description`)}
+          type='text'
+          placeholder="Descrição"
+          className="border-gray-300 rounded-md shadow-sm"
+        />
+        {errors.bills?.[index]?.description && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.bills[index].description.message}
+          </p>
+        )}
       </div>
+
+      <div className="mb-4">
+        <Label htmlFor={`amount-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+          Quantidade
+        </Label>
+        <Input
+          id={`amount-${index}`}
+          {...register(`bills.${index}.amount`, { valueAsNumber: true }) }
+          type='number'
+          placeholder="Quantidade"
+          className="border-gray-300 rounded-md shadow-sm"
+        />
+        {errors.bills?.[index]?.amount && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.bills[index].amount.message}
+          </p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <Label htmlFor={`value-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
+          Valor
+        </Label>
+        <Input
+          id={`value-${index}`}
+          {...register(`bills.${index}.value`, { valueAsNumber: true })}
+          type='number'
+          placeholder="Valor"
+          className="border-gray-300 rounded-md shadow-sm"
+        />
+        {errors.bills?.[index]?.value && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.bills[index].value.message}
+          </p>
+        )}
+      </div>
+    
+      <Button type='button' variant='outline' onClick={() => remove(index)} className="flex items-center text-black hover:text-red-500">
+        <Trash className="mr-2 w-4" />
+        Remover
+      </Button>
+    </div>
+  ))}
+
+  <Button type='button' variant='outline' className='bg-[#29aae1] text-white hover:bg-cyan-500 hover:text-white' onClick={() => append({
+    description: '',
+    amount: 0,
+  })}>
+    <PlusCircle />
+    <span className='ml-2 text-white'>Adicionar item</span>
+  </Button>
+
+  <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+    <p className="text-xl font-bold text-gray-800">
+      Valor Total: <span className="text-green-600">R$ {total_value.toFixed(2)}</span>
+    </p>
+  </div>
+
+  {errors?.bills && (
+    <p className="text-red-500 text-xs">
+      {errors.bills?.message}
+    </p>
+  )}
+</div>
 
         <DialogFooter className="flex justify-center items-center">
         {isSubmitting ? (
