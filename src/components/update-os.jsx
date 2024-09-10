@@ -822,7 +822,7 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
 
       <div className="mb-4">
         <Label htmlFor={`value-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
-          Valor
+          Valor Unitário
         </Label>
         <Input
           id={`value-${index}`}
