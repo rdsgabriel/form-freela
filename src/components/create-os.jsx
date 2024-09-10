@@ -842,7 +842,7 @@ useEffect(() => {
       <Input
           id={`value-${index}`}
           {...register(`bills.${index}.value`,
-             {
+             { valueAsNumber: true,
               validate: {
                 positiveNumber: value => {
                   if (value === undefined || value === '' || isNaN(value) || value === null) {
@@ -861,7 +861,7 @@ useEffect(() => {
         />
       {errors.bills?.[index]?.value && (
         <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].value.message}
+          {errors.bills[index].value.message ||  'Valor inválido. Por favor, informe um valor numérico.'}
         </p>
       )}
     </div>
