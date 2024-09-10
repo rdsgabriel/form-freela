@@ -18,19 +18,19 @@ import { PlusCircle, Trash } from 'lucide-react';
 
 const billSchema = z.array(
   z.object({
-    description: z.string().min(3, 'Por favor, informe uma descrição válida'),
+    description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
     amount: z.number()
+      .transform(val => (val === '' ? 0 : val))
       .positive('Por favor, informe um valor válido.')
-      .or(z.string().refine(val => !isNaN(Number(val)), {
+      .or(z.string().transform(val => Number(val)).refine(val => !isNaN(val), {
         message: 'Por favor, informe um valor válido.'
-      }))
-      .transform(val => Number(val) || 0), // Transforma para número ou 0 se NaN
+      })),
     value: z.number()
+      .transform(val => (val === '' ? 0 : val))
       .positive('Por favor, informe um valor válido.')
-      .or(z.string().refine(val => !isNaN(Number(val)), {
+      .or(z.string().transform(val => Number(val)).refine(val => !isNaN(val), {
         message: 'Por favor, informe um valor válido.'
-      }))
-      .transform(val => Number(val) || 0), // Transforma para número ou 0 se NaN
+      })),
   })
 ).min(1, 'Você deve incluir pelo menos um item.');
 
