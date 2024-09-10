@@ -96,7 +96,6 @@ export function UpdateOSDialog({ order }) {
 
   const [initialValuesSet, setInitialValuesSet] = useState(false);
    // Controle de inicialização
-  
 
   const formatDate = (date) => {
     if (!date) return ''; // Verifica se a data existe
@@ -148,15 +147,19 @@ export function UpdateOSDialog({ order }) {
     });
 
     // Define os campos de bills
-    if (Array.isArray(order.bills)) {
-      order.bills.forEach((bill, index) => {
-        setValue(`bills.${index}.value`, bill.value || 0); // Define um valor padrão 0 se não houver valor
-        setValue(`bills.${index}.amount`, bill.amount || 0);
-        setValue(`bills.${index}.description`, bill.description || ''); // Define uma descrição padrão vazia se não houver descrição
-      });
-    } else {
-      console.error('order.bills não é um array:', order.bills);
-    }}
+    // Define os campos de bills
+if (Array.isArray(order.bills) && order.bills.length > 0) {
+  order.bills.forEach((bill, index) => {
+    setValue(`bills.${index}.value`, bill.value !== undefined ? bill.value : 0);
+    setValue(`bills.${index}.amount`, bill.amount !== undefined ? bill.amount : 0);
+    setValue(`bills.${index}.description`, bill.description !== undefined ? bill.description : '');
+  });
+} else {
+  // Limpa os campos caso não haja bills para evitar enviar dados falsos
+  clearErrors('bills'); // Opcional, se for necessário limpar erros também
+  setValue('bills', []); // Limpa os campos de bills
+  console.error('order.bills não é um array ou está vazio:', order.bills);
+}
 
   // Obtenha os valores do campo 'bills'
   const bills = watch('bills') || []; // Garantir que seja um array
