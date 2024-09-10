@@ -162,9 +162,6 @@ export function CreateOSDialog() {
     remove(index);
   };
 
-
-
-
   const total_value = bills.reduce((total, bill) => total + (bill.value || 0), 0);
 
  
@@ -864,7 +861,7 @@ useEffect(() => {
         />
       {errors.bills?.[index]?.value && (
         <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].value.message}
+          {errors.bills[index].value.message ||  'Valor inválido. Por favor, informe um valor numérico.'}
         </p>
       )}
     </div>
