@@ -842,26 +842,23 @@ useEffect(() => {
       <Input
           id={`value-${index}`}
           {...register(`bills.${index}.value`,
-             { valueAsNumber: true,
-              validate: {
-                positiveNumber: value => {
-                  if (value === undefined || value === '' || isNaN(value)) {
-                    setError(`bills.${index}.value`, {
-                      type: 'manual',
-                      message: 'Por favor, informe um valor válido.',
-                    });
-                    return false;
-                  }
-                  return true;
-                }}
-              })}
+            {
+              validate: value => {
+                const numValue = Number(value);
+                if (isNaN(numValue) || value === '') {
+                  return 'Por favor, informe um valor válido.'; // Mensagem de erro
+                }
+                return true; // Retorna `true` se o valor for válido
+              }
+            }
+             )}
           type='number'
           placeholder="Valor"
           className="border-gray-300 rounded-md shadow-sm"
         />
       {errors.bills?.[index]?.value && (
         <p className="text-red-500 text-xs mt-1">
-          {errors.bills[index].value.message ||  'Valor inválido. Por favor, informe um valor numérico.'}
+          {errors.bills[index].value.message}
         </p>
       )}
     </div>
@@ -876,6 +873,7 @@ useEffect(() => {
 <Button type='button' variant='outline' className='bg-[#29aae1] text-white hover:bg-cyan-500 hover:text-white' onClick={() => append({
   description: '',
   amount: 0,
+  value: 0,
 })}>
   <PlusCircle />
   <span className='ml-2 text-white'>Adicionar item</span>
