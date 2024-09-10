@@ -842,16 +842,19 @@ useEffect(() => {
       <Input
           id={`value-${index}`}
           {...register(`bills.${index}.value`,
-            {
-              validate: value => {
-                const numValue = Number(value);
-                if (isNaN(numValue) || value === '') {
-                  return 'Por favor, informe um valor válido.'; // Mensagem de erro
-                }
-                return true; // Retorna `true` se o valor for válido
-              }
-            }
-             )}
+             {
+              validate: {
+                positiveNumber: value => {
+                  if (value === undefined || value === '' || isNaN(value)) {
+                    setError(`bills.${index}.value`, {
+                      type: 'manual',
+                      message: 'Por favor, informe um valor válido.',
+                    });
+                    return false;
+                  }
+                  return true;
+                }}
+              })}
           type='number'
           placeholder="Valor"
           className="border-gray-300 rounded-md shadow-sm"
