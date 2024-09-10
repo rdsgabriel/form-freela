@@ -261,6 +261,17 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
   };
 
 
+  useEffect(() => {
+    if (bills.length === 0) {
+      append({
+        description: '',
+        amount: 0,
+        value: 0,
+      });
+    }
+  }, [bills, append]);
+
+
   
 
   
@@ -755,11 +766,6 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
 <div className="space-y-4 pl-2">
   {/* Seção: Valores */}
   <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Orçamento</h2>
-
-  {/* Verifique se o array fields está vazio e adicione um item inicial */}
-  {fields.length === 0 && (
-    <p className="text-gray-500 text-sm">Nenhum item adicionado. Clique no botão abaixo para adicionar um item ao orçamento.</p>
-  )}
 
   {/* Mapear os campos de bills */}
   {fields.map((field, index) => (
