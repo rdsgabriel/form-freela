@@ -850,15 +850,28 @@ useEffect(() => {
 
     <div className="mb-4">
       <Label htmlFor={`value-${index}`} className="block mb-1 text-sm font-medium text-gray-700">
-        Valor
+        Valor Unitário
       </Label>
       <Input
-        id={`value-${index}`}
-        {...register(`bills.${index}.value`, { valueAsNumber: true })}
-        type='number'
-        placeholder="Valor"
-        className="border-gray-300 rounded-md shadow-sm"
-      />
+          id={`value-${index}`}
+          {...register(`bills.${index}.value`,
+             { valueAsNumber: true,
+              validate: {
+                positiveNumber: value => {
+                  if (value === undefined || value === '' || isNaN(value)) {
+                    setError(`bills.${index}.value`, {
+                      type: 'manual',
+                      message: 'Por favor, informe um valor válido.',
+                    });
+                    return false;
+                  }
+                  return true;
+                }}
+              })}
+          type='number'
+          placeholder="Valor"
+          className="border-gray-300 rounded-md shadow-sm"
+        />
       {errors.bills?.[index]?.value && (
         <p className="text-red-500 text-xs mt-1">
           {errors.bills[index].value.message}
