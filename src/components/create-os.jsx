@@ -845,7 +845,7 @@ useEffect(() => {
              {
               validate: {
                 positiveNumber: value => {
-                  if (value === undefined || value === '' || isNaN(value)) {
+                  if (value === undefined || value === '' || isNaN(value) || value == null) {
                     setError(`bills.${index}.value`, {
                       type: 'manual',
                       message: 'Por favor, informe um valor válido.',
