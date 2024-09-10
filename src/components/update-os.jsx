@@ -271,6 +271,15 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
     }
   }, [bills, append]);
 
+  const handleRemove = (index) => {
+    if (bills.length <= 1) {
+      setError('Você precisa manter pelo menos um item.');
+      return;
+    }
+    setError(''); // Limpar a mensagem de erro se a remoção for permitida
+    remove(index);
+  };
+
 
   
 
@@ -767,6 +776,7 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
   {/* Seção: Valores */}
   <h2 className="text-lg font-semibold bg-[#29aae1] text-white pl-2 py-2">Orçamento</h2>
 
+
   {/* Mapear os campos de bills */}
   {fields.map((field, index) => (
     <div key={field.id} className="border p-4 rounded-md shadow-sm mb-4">
@@ -825,7 +835,7 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
         )}
       </div>
     
-      <Button type='button' variant='outline' onClick={() => remove(index)} className="flex items-center text-black hover:text-red-500">
+      <Button type='button' variant='outline' onClick={() => handleRemove(index)} className="flex items-center text-black hover:text-red-500">
         <Trash className="mr-2 w-4" />
         Remover
       </Button>
