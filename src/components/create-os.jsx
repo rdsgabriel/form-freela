@@ -861,7 +861,7 @@ useEffect(() => {
                   return true;
                 }}
               })}
-          type='text'
+          type='number'
           placeholder="Valor"
           className="border-gray-300 rounded-md shadow-sm"
         />
