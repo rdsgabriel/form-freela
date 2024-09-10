@@ -85,7 +85,7 @@ const createOSSchema = z.object({
 });
 
 export function UpdateOSDialog({ order }) {
-  const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, control, setValue, setError, clearErrors, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
 
@@ -273,10 +273,13 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
 
   const handleRemove = (index) => {
     if (bills.length <= 1) {
-      setError('Você precisa manter pelo menos um item.');
+      setError('bills', {
+        type: 'manual',
+        message: 'Você precisa manter pelo menos um item.'
+      });
       return;
     }
-    setError(''); // Limpar a mensagem de erro se a remoção for permitida
+    clearErrors('bills'); // Limpar os erros se a remoção for permitida
     remove(index);
   };
 
