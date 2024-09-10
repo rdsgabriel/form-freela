@@ -159,7 +159,7 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
   clearErrors('bills'); // Opcional, se for necessário limpar erros também
   setValue('bills', []); // Limpa os campos de bills
   console.error('order.bills não é um array ou está vazio:', order.bills);
-}
+}}
 
   // Obtenha os valores do campo 'bills'
   const bills = watch('bills') || []; // Garantir que seja um array
