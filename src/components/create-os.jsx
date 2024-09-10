@@ -150,16 +150,6 @@ export function CreateOSDialog() {
 
   const bills = watch('bills') || [];
 
-  useEffect(() => {
-    if (bills.length === 0) {
-      append({
-        description: '',
-        amount: 0,
-        value: 0,
-      });
-    }
-  }, [bills, append]);
-
   const handleRemove = (index) => {
     if (bills.length <= 1) {
       setError('bills', {
