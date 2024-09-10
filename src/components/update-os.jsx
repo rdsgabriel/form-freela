@@ -826,7 +826,20 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
         </Label>
         <Input
           id={`value-${index}`}
-          {...register(`bills.${index}.value`, { valueAsNumber: true })}
+          {...register(`bills.${index}.value`,
+             { valueAsNumber: true,
+              validate: {
+                positiveNumber: value => {
+                  if (value === undefined || value === '' || isNaN(value)) {
+                    setError(`bills.${index}.value`, {
+                      type: 'manual',
+                      message: 'Por favor, informe um valor válido.',
+                    });
+                    return false;
+                  }
+                  return true;
+                }}
+              })}
           type='number'
           placeholder="Valor"
           className="border-gray-300 rounded-md shadow-sm"
