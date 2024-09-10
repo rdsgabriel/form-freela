@@ -870,16 +870,6 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
           Atualizar
         </Button>
       )}
-              {Object.keys(errors).length > 0 && (
-  <div className="text-red-500">
-    {Object.keys(errors).map((key) => (
-      <p key={key}>
-        {key}: {errors[key]?.message || 'Unknown error'}
-      </p>
-    ))}
-  </div>
-)}
-
 
 
           <DialogClose asChild className="ml-2">
