@@ -18,7 +18,7 @@ import { PlusCircle, Trash } from 'lucide-react';
 
 const billSchema = z.array(
   z.object({
-    description: z.string().min(3, 'Por favor, informe uma descrição válida.'),
+    description: z.string().min(3, 'Por favor, informe uma descrição válida'),
     amount: z.number().positive('Por favor, informe um valor válido'),
     value: z.number().positive('Por favor, informe um valor válido')
   })
@@ -275,7 +275,7 @@ if (Array.isArray(order.bills) && order.bills.length > 0) {
     if (bills.length <= 1) {
       setError('bills', {
         type: 'manual',
-        message: 'Você precisa manter pelo menos um item.'
+        message: 'Você precisa manter pelo menos um item no orçamento para gerar uma OS.'
       });
       return;
     }

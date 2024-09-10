@@ -84,7 +84,7 @@ const createOSSchema = z.object({
 });
 
 export function CreateOSDialog() {
-  const { register, handleSubmit, watch, control, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, control, setValue, setError, clearErrors, formState: { errors } } = useForm({
     resolver: zodResolver(createOSSchema),
   });
 
@@ -149,6 +149,32 @@ export function CreateOSDialog() {
   const orderNumber = generateOrderNumber();
 
   const bills = watch('bills') || [];
+
+  useEffect(() => {
+    if (bills.length === 0) {
+      append({
+        description: '',
+        amount: 0,
+        value: 0,
+      });
+    }
+  }, [bills, append]);
+
+  const handleRemove = (index) => {
+    if (bills.length <= 1) {
+      setError('bills', {
+        type: 'manual',
+        message: 'Você precisa manter pelo menos um item no orçamento para gerar uma OS.'
+      });
+      return;
+    }
+    clearErrors('bills'); // Limpar os erros se a remoção for permitida
+    remove(index);
+  };
+
+
+
+
   const total_value = bills.reduce((total, bill) => total + (bill.value || 0), 0);
 
  
@@ -275,6 +301,10 @@ useEffect(() => {
     input.setAttribute('name', `disable_autofill_${Math.random()}`);
   });
 }, []);
+
+
+
+
 
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
@@ -836,7 +866,7 @@ useEffect(() => {
       )}
     </div>
   
-    <Button type='button' variant='outline' onClick={() => remove(index)} className="flex items-center text-black hover:text-red-500">
+    <Button type='button' variant='outline' onClick={() => handleRemove(index)} className="flex items-center text-black hover:text-red-500">
       <Trash className="mr-2 w-4" />
       Remover
     </Button>
