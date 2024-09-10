@@ -260,29 +260,7 @@ export function UpdateOSDialog({ order }) {
 
   
 
-    const fetchImageUrl = async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-
-        try {
-            const response = await fetch(`https://os.estoquefacil.net/api/order-services/shop/logo/${token}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const jsonData = await response.json();
-           
-            setImageUrl(jsonData.logo_url.imageUrl); // Atualiza o estado com a URL da imagem
-            
-        } catch (error) {
-            console.error('Erro ao buscar a imagem:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchImageUrl();
-    }, []);
-
-
+  
   return (
     <DialogContent className="overflow-y-auto max-h-screen max-w-screen p-6 bg-white rounded-lg shadow-lg">
       <DialogHeader>
